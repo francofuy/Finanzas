@@ -1,0 +1,2475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas Pro - Tu Asistente Financiero Inteligente</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a); color: #f1f5f9; min-height: 100vh; }
+        .font-serif { font-family: 'Crimson Pro', Georgia, serif; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+        .flex { display: flex; } .items-center { align-items: center; } .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; } .gap-3 { gap: 0.75rem; } .gap-4 { gap: 1rem; } .gap-6 { gap: 1.5rem; }
+        .rounded-lg { border-radius: 0.5rem; } .rounded-xl { border-radius: 0.75rem; } .rounded-2xl { border-radius: 1rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; } .py-4 { padding-top: 1rem; padding-bottom: 1rem; } .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .p-4 { padding: 1rem; } .p-6 { padding: 1.5rem; } .p-8 { padding: 2rem; }
+        .mb-2 { margin-bottom: 0.5rem; } .mb-4 { margin-bottom: 1rem; } .mb-6 { margin-bottom: 1.5rem; }
+        .mt-4 { margin-top: 1rem; } .ml-2 { margin-left: 0.5rem; }
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.875rem; } .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; } .text-2xl { font-size: 1.5rem; } .text-3xl { font-size: 1.875rem; } .text-6xl { font-size: 3.75rem; }
+        .font-medium { font-weight: 500; } .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+        .w-full { width: 100%; } .h-10 { height: 2.5rem; } .w-10 { width: 2.5rem; } .w-12 { width: 3rem; } .h-12 { height: 3rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; } .space-y-4 > * + * { margin-top: 1rem; } .space-y-6 > * + * { margin-top: 1.5rem; }
+        .grid { display: grid; } .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .relative { position: relative; } .absolute { position: absolute; } .overflow-hidden { overflow: hidden; }
+        .border { border-width: 1px; } .transition-all { transition: all 0.3s; }
+        .text-slate-100 { color: #f1f5f9; } .text-slate-200 { color: #e2e8f0; } .text-slate-300 { color: #cbd5e1; }
+        .text-slate-400 { color: #94a3b8; } .text-slate-500 { color: #64748b; }
+        .text-cyan-400 { color: #22d3ee; } .text-blue-300 { color: #93c5fd; } .text-blue-400 { color: #60a5fa; }
+        .text-amber-300 { color: #fcd34d; } .text-amber-400 { color: #fbbf24; } .text-red-300 { color: #fca5a5; }
+        .text-purple-400 { color: #c084fc; } .text-green-300 { color: #86efac; }
+        .bg-slate-700 { background-color: #334155; } .bg-slate-800 { background-color: #1e293b; } .bg-slate-900 { background-color: #0f172a; }
+        .border-slate-700 { border-color: #334155; }
+        .card { background: rgba(30,41,59,0.5); backdrop-filter: blur(12px); border: 1px solid rgba(71,85,105,0.5); border-radius: 0.75rem; padding: 1.5rem; }
+        .btn { padding: 0.5rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; font-weight: 500; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-primary { background: #06b6d4; color: white; } .btn-primary:hover { background: #0891b2; }
+        .btn-secondary { background: #334155; color: white; } .btn-secondary:hover { background: #475569; }
+        .input { width: 100%; padding: 0.5rem 1rem; border-radius: 0.5rem; background: rgba(15,23,42,0.5); border: 1px solid #334155; color: #f1f5f9; font-size: 0.875rem; }
+        .input:focus { outline: none; border-color: #06b6d4; }
+        .header { background: rgba(15,23,42,0.8); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(6,182,212,0.2); position: sticky; top: 0; z-index: 50; }
+        .nav-btn { padding: 0.4rem 0.75rem; border-radius: 0.5rem; border: none; background: transparent; color: #94a3b8; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.375rem; font-size: 0.8rem; white-space: nowrap; }
+        .nav-btn:hover { color: #cbd5e1; background: rgba(30,41,59,0.5); }
+        .nav-btn.active { background: rgba(6,182,212,0.2); color: #22d3ee; border: 1px solid rgba(6,182,212,0.3); }
+        .hero-card { background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(59,130,246,0.1), rgba(139,92,246,0.1)); border: 1px solid rgba(6,182,212,0.2); border-radius: 1rem; padding: 2rem; position: relative; overflow: hidden; }
+        .hero-card::before { content: ''; position: absolute; top: 0; right: 0; width: 16rem; height: 16rem; background: rgba(6,182,212,0.1); border-radius: 50%; filter: blur(64px); }
+        .gradient-text { background: linear-gradient(to right, #22d3ee, #60a5fa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .progress-bar { height: 0.5rem; background: #0f172a; border-radius: 9999px; overflow: hidden; margin-top: 1rem; }
+        .progress-fill { height: 100%; background: linear-gradient(to right, #06b6d4, #3b82f6); border-radius: 9999px; transition: width 0.5s; }
+        .progress-fill.danger { background: #ef4444; } .progress-fill.warning { background: #f59e0b; } .progress-fill.success { background: #22c55e; }
+        .alert { padding: 0.75rem; border-radius: 0.5rem; border: 1px solid; display: flex; align-items: center; gap: 0.5rem; }
+        .alert-info { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: #93c5fd; }
+        .alert-warning { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: #fcd34d; }
+        .alert-danger { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+        table { width: 100%; border-collapse: collapse; }
+        thead { border-bottom: 1px solid #334155; }
+        th { padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; }
+        td { padding: 0.875rem 1rem; border-bottom: 1px solid rgba(51,65,85,0.5); }
+        tbody tr:hover { background: rgba(51,65,85,0.3); }
+        @media (min-width: 768px) { .md-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .md-grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .md-grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+        /* New styles */
+        .badge { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 600; }
+        .badge-green { background: rgba(34,197,94,0.15); color: #86efac; }
+        .badge-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+        .badge-amber { background: rgba(245,158,11,0.15); color: #fcd34d; }
+        .badge-red { background: rgba(239,68,68,0.15); color: #fca5a5; }
+        .badge-purple { background: rgba(139,92,246,0.15); color: #c084fc; }
+        .badge-cyan { background: rgba(6,182,212,0.15); color: #22d3ee; }
+        .delete-btn { background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.25rem 0.5rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; transition: all 0.2s; }
+        .delete-btn:hover { background: rgba(239,68,68,0.25); }
+        .edit-btn { background: rgba(59,130,246,0.1); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); padding: 0.25rem 0.5rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; transition: all 0.2s; }
+        .edit-btn:hover { background: rgba(59,130,246,0.25); }
+        .strategy-btn { padding: 0.5rem 1.25rem; border-radius: 0.5rem; border: 1px solid #334155; background: transparent; color: #94a3b8; cursor: pointer; font-weight: 500; transition: all 0.2s; font-size: 0.875rem; }
+        .strategy-btn.active { background: rgba(6,182,212,0.15); color: #22d3ee; border-color: rgba(6,182,212,0.4); }
+        .rule-bar-wrap { margin-top: 0.5rem; }
+        .rule-bar-track { height: 1.75rem; background: rgba(15,23,42,0.7); border-radius: 0.5rem; overflow: hidden; position: relative; border: 1px solid #1e293b; }
+        .rule-bar-fill { height: 100%; border-radius: 0.5rem; display: flex; align-items: center; padding: 0 0.75rem; font-size: 0.75rem; font-weight: 700; color: white; transition: width 0.6s ease; min-width: 2rem; }
+        .ef-bar-track { height: 2.25rem; background: rgba(15,23,42,0.7); border-radius: 0.5rem; overflow: hidden; border: 1px solid #1e293b; position: relative; }
+        .ef-bar-fill { height: 100%; border-radius: 0.5rem; display: flex; align-items: center; justify-content: flex-end; padding-right: 0.75rem; font-size: 0.8rem; font-weight: 700; color: white; transition: width 0.6s ease; background: linear-gradient(to right, #22c55e, #06b6d4); }
+        .chart-legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+        .legend-item { display: flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; color: #94a3b8; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+        .legend-line { width: 18px; height: 2px; flex-shrink: 0; }
+        .chart-container { background: rgba(15,23,42,0.4); border-radius: 0.75rem; padding: 1.25rem; overflow: hidden; }
+        .month-toggle { display: inline-flex; padding: 0.25rem; background: rgba(15,23,42,0.5); border-radius: 0.5rem; border: 1px solid #334155; }
+        .month-btn { padding: 0.25rem 0.6rem; border: none; background: transparent; color: #94a3b8; border-radius: 0.375rem; cursor: pointer; font-size: 0.75rem; transition: all 0.15s; }
+        .month-btn.active { background: rgba(6,182,212,0.2); color: #22d3ee; }
+        .debt-rank { display: inline-flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border-radius: 50%; font-size: 0.8rem; font-weight: 700; background: rgba(6,182,212,0.15); color: #22d3ee; border: 1px solid rgba(6,182,212,0.3); flex-shrink: 0; }
+        .nav-divider { width: 1px; background: rgba(71,85,105,0.5); margin: 0 0.25rem; align-self: stretch; }
+        .kpi-card { background: rgba(30,41,59,0.4); border: 1px solid rgba(71,85,105,0.4); border-radius: 0.75rem; padding: 1.25rem; }
+        .cashflow-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        .cashflow-table th { padding: 0.5rem 0.75rem; text-align: right; font-size: 0.7rem; color: #64748b; background: rgba(15,23,42,0.4); }
+        .cashflow-table th:first-child { text-align: left; }
+        .cashflow-table td { padding: 0.5rem 0.75rem; text-align: right; border-bottom: 1px solid rgba(51,65,85,0.3); }
+        .cashflow-table td:first-child { text-align: left; font-weight: 500; }
+        .cashflow-table tr.projected td { color: #64748b; }
+        .cashflow-table tr.total-row td { font-weight: 700; border-top: 1px solid #334155; border-bottom: none; color: #cbd5e1; }
+        .month-chip { display: inline-flex; align-items: center; justify-content: center; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-size: 0.72rem; cursor: pointer; border: 1px solid; transition: all 0.15s; }
+        /* Prevent scroll on number inputs */
+        input[type="number"] { -moz-appearance: textfield; }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+// Prevent scroll when interacting with number inputs
+document.addEventListener('wheel', function(e) {
+    if (document.activeElement && (document.activeElement.type === 'number' || document.activeElement.inputMode === 'decimal')) {
+        e.preventDefault();
+        document.activeElement.blur();
+    }
+}, { passive: false });
+// Prevent scroll jump on input focus in mobile
+document.addEventListener('focus', function(e) {
+    if (e.target.tagName === 'INPUT' && (e.target.type === 'number' || e.target.inputMode === 'decimal')) {
+        setTimeout(() => { window.scrollTo(window.scrollX, window.scrollY); }, 50);
+    }
+}, true);
+</script>
+<script type="text/babel">
+const { useState, useEffect, useMemo } = React;
+
+// ── STORAGE ──────────────────────────────────────────────────────────
+const storage = {
+    get(key) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch(e) { return null; } },
+    set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch(e) { return false; } },
+    list(prefix) { try { const k = []; for (let i = 0; i < localStorage.length; i++) { const key = localStorage.key(i); if (key.startsWith(prefix)) k.push(key); } return k; } catch(e) { return []; } }
+};
+
+// ── ML CATEGORIZER ────────────────────────────────────────────────────
+class MLCategorizer {
+    constructor() { this.patterns = {}; this.history = []; }
+    train(transaction, category) {
+        const key = this.extractFeatures(transaction);
+        if (!this.patterns[key]) this.patterns[key] = {};
+        this.patterns[key][category] = (this.patterns[key][category] || 0) + 1;
+        this.history.push({ transaction, category, timestamp: Date.now() });
+        if (this.history.length > 1000) this.history = this.history.slice(-1000);
+        storage.set('ml-model', { patterns: this.patterns, history: this.history.slice(-100) });
+    }
+    extractFeatures(transaction) {
+        const desc = transaction.description.toLowerCase();
+        const words = desc.split(/\s+/).filter(w => w.length > 3);
+        const amount = Math.round(transaction.amount / 10) * 10;
+        const day = new Date(transaction.date).getDay();
+        return `${words.slice(0, 2).join('_')}_${amount}_${day}`;
+    }
+    predict(transaction) {
+        const key = this.extractFeatures(transaction);
+        const matches = this.patterns[key];
+        if (!matches) {
+            const desc = transaction.description.toLowerCase();
+            for (const hist of this.history.slice(-50)) {
+                if (hist.transaction.description.toLowerCase().includes(desc.slice(0, 5))) return { category: hist.category, confidence: 0.6 };
+            }
+            return { category: 'other', confidence: 0.0 };
+        }
+        const total = Object.values(matches).reduce((a, b) => a + b, 0);
+        const best = Object.entries(matches).sort((a, b) => b[1] - a[1])[0];
+        return { category: best[0], confidence: best[1] / total };
+    }
+    load() { const m = storage.get('ml-model'); if (m) { this.patterns = m.patterns || {}; this.history = m.history || []; } }
+}
+
+// ── PREDICTION ENGINE (FIXED ALERTS) ─────────────────────────────────
+class PredictionEngine {
+    constructor(transactions, categories) { this.transactions = transactions; this.categories = categories || []; }
+    getCatName(catId) {
+        const c = this.categories.find(c => c.id === catId);
+        return c ? `${c.icon} ${c.name}` : catId;
+    }
+    generateAlerts(budgets, currentMonth) {
+        const alerts = [];
+        const now = new Date();
+        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        const progressPct = now.getDate() / daysInMonth;
+        Object.entries(budgets).forEach(([category, limit]) => {
+            if (!limit || limit <= 0) return; // Skip categories without budget
+            const spent = this.transactions.filter(t => t.category === category && t.date.startsWith(currentMonth)).reduce((s, t) => s + t.amount, 0);
+            const spentPct = spent / limit;
+            const catName = this.getCatName(category);
+            if (spentPct > 1.0) {
+                alerts.push({ type: 'danger', category, message: `Excediste el presupuesto de ${catName} en $${fmt(spent - limit)}`, severity: 'high' });
+            } else if (spentPct > 0.9) {
+                alerts.push({ type: 'warning', category, message: `${catName} al ${Math.round(spentPct * 100)}% del presupuesto`, severity: 'medium' });
+            } else if (spentPct > progressPct + 0.15) {
+                alerts.push({ type: 'info', category, message: `${catName}: vas ${Math.round((spentPct - progressPct) * 100)}% por encima del ritmo`, severity: 'low' });
+            }
+            // ✅ No alert if under budget = alert disappears automatically
+        });
+        return alerts.sort((a, b) => ({ high: 3, medium: 2, low: 1 }[b.severity] - { high: 3, medium: 2, low: 1 }[a.severity]));
+    }
+}
+
+// ── SMART ANALYTICS ENGINE ───────────────────────────────────────────
+class SmartAnalytics {
+    constructor(transactions, categories, budgets, incomes, fixedExpenses, debts, emergencyFund, currentMonth) {
+        this.tx = transactions;
+        this.cats = categories;
+        this.budgets = budgets;
+        this.incomes = incomes;
+        this.fixed = fixedExpenses;
+        this.debts = debts;
+        this.ef = emergencyFund;
+        this.cm = currentMonth;
+        this.now = new Date();
+        this.monthNum = this.now.getMonth() + 1;
+    }
+
+    // ── Financial Health Score (0-100) ──
+    healthScore() {
+        const scores = [];
+        const incomeFromTx = this.tx.filter(t => t.date.startsWith(this.cm) && t.category === 'income').reduce((s,t)=>s+t.amount,0);
+        const totalIncome = (this.incomes.length > 0 ? calcMonthlyIncome(this.incomes, this.monthNum) : 0) + incomeFromTx;
+        const monthlyFixed = calcMonthlyFixed(this.fixed);
+        const thisMonthTx = this.tx.filter(t => t.date.startsWith(this.cm));
+        const totalSpent = thisMonthTx.filter(t => isVariableTx(t)).reduce((s,t)=>s+t.amount,0);
+
+        // 1. Budget adherence (25 pts)
+        const totalBudget = Object.values(this.budgets).reduce((s,b)=>s+b,0);
+        if (totalBudget > 0) {
+            const ratio = Math.min(totalSpent / totalBudget, 2);
+            scores.push({ name: 'Presupuesto', score: Math.round(Math.max(0, (1 - Math.max(0, ratio - 0.7) / 0.6)) * 25), max: 25, icon: '🎯' });
+        } else {
+            scores.push({ name: 'Presupuesto', score: 0, max: 25, icon: '🎯', note: 'Configurá presupuestos' });
+        }
+
+        // 2. Savings rate (25 pts)
+        if (totalIncome > 0) {
+            const savingsRate = Math.max(0, (totalIncome - totalSpent - monthlyFixed) / totalIncome);
+            scores.push({ name: 'Tasa de ahorro', score: Math.round(Math.min(savingsRate / 0.2, 1) * 25), max: 25, icon: '💰' });
+        } else {
+            scores.push({ name: 'Tasa de ahorro', score: 0, max: 25, icon: '💰', note: 'Configurá ingresos' });
+        }
+
+        // 3. Emergency fund (25 pts)
+        const efTotal = (this.ef.housing||0)+(this.ef.utilities||0)+(this.ef.food||0)+(this.ef.transport||0)+(this.ef.health||0)+(this.ef.other||0);
+        const efTarget = efTotal * (this.ef.targetMonths || 6);
+        if (efTarget > 0) {
+            const efPct = Math.min((this.ef.currentBalance||0) / efTarget, 1);
+            scores.push({ name: 'Fondo emergencia', score: Math.round(efPct * 25), max: 25, icon: '🚨' });
+        } else {
+            scores.push({ name: 'Fondo emergencia', score: 0, max: 25, icon: '🚨', note: 'Configurá fondo' });
+        }
+
+        // 4. Debt management (25 pts)
+        const totalDebt = this.debts.reduce((s,d)=>s+(d.balance||0),0);
+        if (this.debts.length === 0) {
+            scores.push({ name: 'Sin deudas', score: 25, max: 25, icon: '✅' });
+        } else if (totalIncome > 0) {
+            const dti = this.debts.reduce((s,d)=>s+(d.payment||0),0) / totalIncome;
+            scores.push({ name: 'Deuda/Ingreso', score: Math.round(Math.max(0, 1 - dti / 0.4) * 25), max: 25, icon: '💳' });
+        } else {
+            scores.push({ name: 'Deudas', score: totalDebt > 0 ? 5 : 25, max: 25, icon: '💳' });
+        }
+
+        const total = scores.reduce((s,x) => s + x.score, 0);
+        const label = total >= 80 ? 'Excelente' : total >= 60 ? 'Bueno' : total >= 40 ? 'Regular' : 'Necesita atención';
+        const color = total >= 80 ? '#22c55e' : total >= 60 ? '#3b82f6' : total >= 40 ? '#f59e0b' : '#ef4444';
+        return { total, scores, label, color };
+    }
+
+    // ── Anomaly Detection (Z-score) ──
+    detectAnomalies() {
+        const anomalies = [];
+        const catGroups = {};
+        this.tx.forEach(t => {
+            if (['income','savings'].includes(t.category)) return;
+            if (!catGroups[t.category]) catGroups[t.category] = [];
+            catGroups[t.category].push(t);
+        });
+        Object.entries(catGroups).forEach(([catId, txs]) => {
+            if (txs.length < 3) return; // Need at least 3 for stats
+            const amounts = txs.map(t => t.amount);
+            const mean = amounts.reduce((s,a)=>s+a,0) / amounts.length;
+            const variance = amounts.reduce((s,a)=>s+Math.pow(a-mean,2),0) / amounts.length;
+            const stdDev = Math.sqrt(variance);
+            if (stdDev === 0) return;
+            // Check only this month's transactions
+            txs.filter(t => t.date.startsWith(this.cm)).forEach(t => {
+                const zScore = (t.amount - mean) / stdDev;
+                if (zScore > 2) {
+                    const cat = this.cats.find(c=>c.id===catId);
+                    anomalies.push({
+                        tx: t,
+                        zScore: Math.round(zScore * 10) / 10,
+                        mean: Math.round(mean),
+                        catName: cat ? `${cat.icon} ${cat.name}` : catId,
+                        pctAbove: Math.round(((t.amount - mean) / mean) * 100)
+                    });
+                }
+            });
+        });
+        return anomalies.sort((a,b) => b.zScore - a.zScore);
+    }
+
+    // ── Spending Prediction (end of month) ──
+    predictMonthEnd() {
+        const thisMonthTx = this.tx.filter(t => t.date.startsWith(this.cm) && isVariableTx(t));
+        const totalSpent = thisMonthTx.reduce((s,t)=>s+t.amount,0);
+        const dayOfMonth = this.now.getDate();
+        const daysInMonth = new Date(this.now.getFullYear(), this.now.getMonth()+1, 0).getDate();
+        if (dayOfMonth < 2) return null;
+        const dailyAvg = totalSpent / dayOfMonth;
+        const projected = Math.round(dailyAvg * daysInMonth);
+        const totalBudget = Object.values(this.budgets).reduce((s,b)=>s+b,0);
+        return { projected, dailyAvg: Math.round(dailyAvg), totalBudget, willExceed: totalBudget > 0 && projected > totalBudget, excess: totalBudget > 0 ? projected - totalBudget : 0 };
+    }
+
+    // ── Smart Insights ──
+    generateInsights() {
+        const insights = [];
+        const thisMonthTx = this.tx.filter(t => t.date.startsWith(this.cm) && isVariableTx(t));
+        const incomeFromTx = this.tx.filter(t => t.date.startsWith(this.cm) && t.category === 'income').reduce((s,t)=>s+t.amount,0);
+        const totalIncome = (this.incomes.length > 0 ? calcMonthlyIncome(this.incomes, this.monthNum) : 0) + incomeFromTx;
+        const monthlyFixed = calcMonthlyFixed(this.fixed);
+
+        // Top spending category
+        const catSpending = {};
+        thisMonthTx.forEach(t => { catSpending[t.category] = (catSpending[t.category]||0) + t.amount; });
+        const topCat = Object.entries(catSpending).sort((a,b)=>b[1]-a[1])[0];
+        if (topCat) {
+            const cat = this.cats.find(c=>c.id===topCat[0]);
+            const name = cat ? `${cat.icon} ${cat.name}` : topCat[0];
+            insights.push({ icon: '📊', text: `Tu mayor gasto este mes es ${name}: $${fmt(topCat[1])}`, type: 'info' });
+        }
+
+        // Daily average trend
+        const prediction = this.predictMonthEnd();
+        if (prediction && prediction.willExceed) {
+            insights.push({ icon: '⚠️', text: `A este ritmo ($${fmt(prediction.dailyAvg)}/día), vas a gastar ~$${fmt(prediction.projected)} este mes, $${fmt(prediction.excess)} por encima del presupuesto`, type: 'warning' });
+        } else if (prediction && prediction.totalBudget > 0) {
+            const margin = prediction.totalBudget - prediction.projected;
+            insights.push({ icon: '✅', text: `A este ritmo, terminarás el mes con $${fmt(margin)} de margen sobre tu presupuesto`, type: 'success' });
+        }
+
+        // Fixed expenses ratio
+        if (totalIncome > 0 && monthlyFixed > 0) {
+            const fixedRatio = (monthlyFixed / totalIncome) * 100;
+            if (fixedRatio > 60) {
+                insights.push({ icon: '🔴', text: `Tus gastos fijos representan el ${Math.round(fixedRatio)}% de tu ingreso — es alto, idealmente debería ser <50%`, type: 'danger' });
+            } else if (fixedRatio > 45) {
+                insights.push({ icon: '🟡', text: `Gastos fijos al ${Math.round(fixedRatio)}% del ingreso — estás en el límite recomendado`, type: 'warning' });
+            }
+        }
+
+        // Savings suggestion
+        if (totalIncome > 0) {
+            const variableSpent = thisMonthTx.reduce((s,t)=>s+t.amount,0);
+            const freeBalance = totalIncome - monthlyFixed - variableSpent;
+            if (freeBalance > 0) {
+                insights.push({ icon: '💡', text: `Saldo libre estimado: $${fmt(freeBalance)} — considerá destinar una parte al ahorro o fondo de emergencia`, type: 'tip' });
+            }
+        }
+
+        // Anomalies summary
+        const anomalies = this.detectAnomalies();
+        if (anomalies.length > 0) {
+            insights.push({ icon: '🔍', text: `Se detectaron ${anomalies.length} gasto(s) inusuales este mes — revisá la sección de anomalías`, type: 'info' });
+        }
+
+        // Debt interest burn
+        const totalInterest = this.debts.reduce((s,d)=>s+(d.balance||0)*(d.rate||0)/100/12,0);
+        if (totalInterest > 0) {
+            insights.push({ icon: '🔥', text: `Estás pagando ~$${fmt(totalInterest)}/mes solo en intereses de deudas`, type: 'warning' });
+        }
+
+        return insights;
+    }
+}
+
+// ── KEYWORD CATEGORIZER ──────────────────────────────────────────────
+const KEYWORD_DICT = {
+    food: ['comida','almuerzo','cena','desayuno','supermercado','super','mercado','carniceria','verduleria','panaderia','rappi','pedidosya','uber eats','ubereats','mcdonalds','burger','pizza','restaurante','cafe','cafeteria','bar','sushi','heladeria','helado','facturas','medialunas','fiambreria','rotiseria','kiosco','devoto','tienda inglesa','disco','tata','geant','macro','ta-ta'],
+    transport: ['nafta','combustible','estacionamiento','parking','uber','cabify','taxi','remis','peaje','ancap','shell','axion','ypf','patente','vtv','garage','cochera','bus','boleto','stm','bondi','subte','tren'],
+    housing: ['alquiler','expensas','mudanza','inmobiliaria','contribucion','contribución','saneamiento'],
+    entertainment: ['netflix','spotify','disney','hbo','amazon prime','youtube','cine','teatro','evento','entrada','concierto','juego','play','steam','xbox','nintendo','ps5','playstation'],
+    shopping: ['ropa','zapatos','zapatillas','shopping','zara','nike','adidas','mercadolibre','amazon','tienda','mueble','decoracion','electrodomestico','celular','iphone','samsung'],
+    health: ['farmacia','medico','médico','salud','medicamento','pastilla','prepaga','mutualista','hospital','clinica','clínica','dentista','odontologo','oftalmólogo','veterinaria','vet'],
+    utilities: ['luz','agua','gas','internet','telefono','teléfono','celular plan','antel','movistar','claro','ute','ose','cable'],
+    savings: ['ahorro','plazo fijo','inversion','inversión','fondo','deposito','depósito']
+};
+
+class SmartCategorizer extends MLCategorizer {
+    constructor() { super(); }
+    predict(transaction) {
+        // 1. Try keyword dictionary first
+        const desc = transaction.description.toLowerCase().trim();
+        for (const [catId, keywords] of Object.entries(KEYWORD_DICT)) {
+            for (const kw of keywords) {
+                if (desc.includes(kw)) return { category: catId, confidence: 0.85 };
+            }
+        }
+        // 2. Fall back to ML pattern matching
+        return super.predict(transaction);
+    }
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+const fmt = (n) => { const v = n || 0; return v % 1 === 0 ? Math.round(v).toLocaleString('es-AR') : v.toLocaleString('es-AR', {minimumFractionDigits:2, maximumFractionDigits:2}); };
+const fmtDec = (n) => (n || 0).toFixed(1);
+
+function calcMonthlyIncome(incomes, monthNum) {
+    return incomes.reduce((sum, inc) => {
+        const amt = inc.amount || 0;
+        if (inc.frequency === 'monthly') return sum + amt;
+        if (inc.frequency === 'annual') return sum + amt / 12;
+        if (inc.frequency === 'biannual') { const sm = inc.seasonalMonths || [6, 12]; return sm.includes(monthNum) ? sum + amt : sum; }
+        return sum;
+    }, 0);
+}
+
+function calcMonthlyFixed(fixedExpenses) {
+    // Sólo mensuales + anuales prorrateo (NO incluye specific-month)
+    return fixedExpenses.reduce((sum, exp) => {
+        const amt = exp.amount || 0;
+        if (exp.frequency === 'monthly') return sum + amt;
+        if (exp.frequency === 'annual') return sum + amt / 12;
+        return sum;
+    }, 0);
+}
+
+function calcFixedForMonth(fixedExpenses, monthNum) {
+    // Mensuales + anuales prorrateo + gastos del mes específico elegido
+    return fixedExpenses.reduce((sum, exp) => {
+        const amt = exp.amount || 0;
+        if (exp.frequency === 'monthly') return sum + amt;
+        if (exp.frequency === 'annual') return sum + amt / 12;
+        if (exp.frequency === 'specific-month' && exp.paymentMonth === monthNum) return sum + amt;
+        return sum;
+    }, 0);
+}
+
+function calcPayoffMonths(balance, payment, annualRate) {
+    if (!balance || !payment || payment <= 0) return null;
+    if (!annualRate || annualRate === 0) return Math.ceil(balance / payment);
+    const r = annualRate / 100 / 12;
+    const interest = r * balance;
+    if (payment <= interest) return Infinity;
+    return Math.ceil(-Math.log(1 - (r * balance) / payment) / Math.log(1 + r));
+}
+
+const MONTHS_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const NEEDS_CATS = ['food', 'housing', 'utilities', 'health', 'transport'];
+const WANTS_CATS = ['entertainment', 'shopping', 'other'];
+
+// Helper: is this a variable (non-fixed) spending transaction?
+const isVariableTx = (t) => !['income','savings'].includes(t.category) && !t.fixedExpenseId;
+const isSpendingTx = (t) => !['income','savings'].includes(t.category);
+
+// ── MAIN APP ──────────────────────────────────────────────────────────
+function FinanceApp() {
+    const [view, setView] = useState('dashboard');
+    const [transactions, setTransactions] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [budgets, setBudgets] = useState({});
+    const [goals, setGoals] = useState([]);
+    const [mlCategorizer] = useState(() => new SmartCategorizer());
+    const [loading, setLoading] = useState(true);
+    const [incomes, setIncomes] = useState([]);
+    const [fixedExpenses, setFixedExpenses] = useState([]);
+    const [debts, setDebts] = useState([]);
+    const [emergencyFund, setEmergencyFund] = useState({ housing: 0, utilities: 0, food: 0, transport: 0, health: 0, other: 0, targetMonths: 6, currentBalance: 0, monthlyDeposit: 0 });
+
+    const currentMonth = useMemo(() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`; }, []);
+
+    useEffect(() => {
+        setLoading(true);
+        let cats = storage.get('categories');
+        if (!cats) {
+            cats = [
+                { id: 'food', name: 'Alimentación', icon: '🍔', color: '#10b981' },
+                { id: 'transport', name: 'Transporte', icon: '🚗', color: '#3b82f6' },
+                { id: 'housing', name: 'Vivienda', icon: '🏠', color: '#8b5cf6' },
+                { id: 'entertainment', name: 'Entretenimiento', icon: '🎬', color: '#f59e0b' },
+                { id: 'shopping', name: 'Compras', icon: '🛍️', color: '#ec4899' },
+                { id: 'health', name: 'Salud', icon: '⚕️', color: '#06b6d4' },
+                { id: 'utilities', name: 'Servicios', icon: '⚡', color: '#6366f1' },
+                { id: 'income', name: 'Ingresos', icon: '💰', color: '#22c55e' },
+                { id: 'savings', name: 'Ahorros', icon: '🏦', color: '#14b8a6' },
+                { id: 'other', name: 'Otros', icon: '📦', color: '#64748b' }
+            ];
+            storage.set('categories', cats);
+        }
+        setCategories(cats);
+        const txKeys = storage.list('transactions:');
+        const allTx = [];
+        for (const key of txKeys) { const m = storage.get(key); if (m) allTx.push(...m); }
+        setTransactions(allTx.sort((a,b) => new Date(b.date)-new Date(a.date)));
+        setBudgets(storage.get(`budgets:${currentMonth}`) || {});
+        setGoals(storage.get('goals') || []);
+        mlCategorizer.load();
+        setIncomes(storage.get('incomes') || []);
+        setFixedExpenses(storage.get('fixed-expenses') || []);
+        setDebts(storage.get('debts') || []);
+        setEmergencyFund(storage.get('emergency-fund') || { housing:0, utilities:0, food:0, transport:0, health:0, other:0, targetMonths:6, currentBalance:0, monthlyDeposit:0 });
+        setLoading(false);
+    }, [currentMonth, mlCategorizer]);
+
+    const addTransaction = (transaction) => {
+        const newTx = { id: Date.now().toString(), date: new Date().toISOString().split('T')[0], ...transaction };
+        if (!newTx.category || newTx.category === 'Sin categorizar') {
+            const pred = mlCategorizer.predict(newTx);
+            newTx.category = pred.confidence > 0.5 ? pred.category : 'other';
+            if (pred.confidence > 0.5) newTx.autoCategorized = true;
+        }
+        const updated = [newTx, ...transactions];
+        setTransactions(updated);
+        const month = newTx.date.substring(0, 7);
+        storage.set(`transactions:${month}`, updated.filter(t => t.date.startsWith(month)));
+        if (newTx.category !== 'Sin categorizar') mlCategorizer.train(newTx, newTx.category);
+    };
+
+    const deleteTransaction = (txId) => {
+        const tx = transactions.find(t => t.id === txId);
+        if (!tx) return;
+        const updated = transactions.filter(t => t.id !== txId);
+        setTransactions(updated);
+        storage.set(`transactions:${tx.date.substring(0,7)}`, updated.filter(t => t.date.startsWith(tx.date.substring(0,7))));
+    };
+
+    const updateTransaction = (txId, newData) => {
+        const oldTx = transactions.find(t => t.id === txId);
+        if (!oldTx) return;
+        const updatedTx = {...oldTx, ...newData};
+        let updated = transactions.map(t => t.id === txId ? updatedTx : t);
+        updated = updated.sort((a,b) => new Date(b.date)-new Date(a.date));
+        setTransactions(updated);
+        // Save old month
+        const oldMonth = oldTx.date.substring(0,7);
+        storage.set(`transactions:${oldMonth}`, updated.filter(t => t.date.startsWith(oldMonth)));
+        // Save new month if different
+        const newMonth = updatedTx.date.substring(0,7);
+        if (newMonth !== oldMonth) {
+            storage.set(`transactions:${newMonth}`, updated.filter(t => t.date.startsWith(newMonth)));
+        }
+        if (updatedTx.category) mlCategorizer.train(updatedTx, updatedTx.category);
+    };
+
+    const addCategory = (cat) => {
+        const updated = [...categories, cat];
+        setCategories(updated);
+        storage.set('categories', updated);
+    };
+
+    const updateBudget = (category, amount) => { const u = {...budgets,[category]:amount}; setBudgets(u); storage.set(`budgets:${currentMonth}`,u); };
+    const addGoal = (goal) => { const u = [...goals,{id:Date.now().toString(),...goal,progress:0}]; setGoals(u); storage.set('goals',u); };
+    const updateGoal = (goalId, amount) => { const u = goals.map(g => g.id===goalId ? {...g,progress:g.progress+amount} : g); setGoals(u); storage.set('goals',u); };
+    const deleteGoal = (goalId) => { const u = goals.filter(g => g.id !== goalId); setGoals(u); storage.set('goals', u); };
+
+    const saveIncomes = (u) => { setIncomes(u); storage.set('incomes', u); };
+    const saveFixed = (u) => { setFixedExpenses(u); storage.set('fixed-expenses', u); };
+    const saveDebts = (u) => { setDebts(u); storage.set('debts', u); };
+    const saveEF = (u) => { setEmergencyFund(u); storage.set('emergency-fund', u); };
+
+    const importJSON = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            try {
+                const data = JSON.parse(ev.target.result);
+                if (data.categories) { setCategories(data.categories); storage.set('categories', data.categories); }
+                if (data.transactions) {
+                    setTransactions(data.transactions);
+                    const months = {};
+                    data.transactions.forEach(t => { const m = t.date.substring(0,7); if (!months[m]) months[m] = []; months[m].push(t); });
+                    Object.entries(months).forEach(([m, txs]) => storage.set(`transactions:${m}`, txs));
+                }
+                if (data.budgets) { setBudgets(data.budgets); storage.set(`budgets:${currentMonth}`, data.budgets); }
+                if (data.goals) { setGoals(data.goals); storage.set('goals', data.goals); }
+                if (data.incomes) { setIncomes(data.incomes); storage.set('incomes', data.incomes); }
+                if (data.fixedExpenses) { setFixedExpenses(data.fixedExpenses); storage.set('fixed-expenses', data.fixedExpenses); }
+                if (data.debts) { setDebts(data.debts); storage.set('debts', data.debts); }
+                if (data.emergencyFund) { setEmergencyFund(data.emergencyFund); storage.set('emergency-fund', data.emergencyFund); }
+                alert('✅ Datos importados correctamente');
+            } catch(err) { alert('❌ Error al importar: ' + err.message); }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+    };
+
+    const exportJSON = () => {
+        const data = { transactions, categories, budgets, goals, incomes, fixedExpenses, debts, emergencyFund, exportDate: new Date().toISOString() };
+        const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download=`finanzas-${currentMonth}.json`; a.click();
+    };
+
+    const exportXLSX = () => {
+        if (typeof XLSX === 'undefined') { alert('Librería Excel no disponible. Verificá tu conexión.'); return; }
+        const wb = XLSX.utils.book_new();
+        const cats = categories;
+
+        // Transacciones
+        const txRows = transactions.length ? transactions.map(t => ({
+            'Fecha': t.date, 'Descripción': t.description,
+            'Categoría': cats.find(c=>c.id===t.category)?.name || t.category,
+            'Monto ($)': t.amount
+        })) : [{'Info':'Sin transacciones'}];
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(txRows), 'Transacciones');
+
+        // Ingresos
+        const incRows = incomes.length ? incomes.map(i => ({
+            'Fuente': i.name, 'Monto ($)': i.amount,
+            'Frecuencia': i.frequency==='monthly'?'Mensual':i.frequency==='biannual'?'Semestral':'Anual',
+            'Tipo': i.type==='fixed'?'Fijo':'Variable',
+            'Equiv. Mensual ($)': i.frequency==='monthly'?i.amount:i.frequency==='annual'?i.amount/12:i.amount/6,
+            'Notas': i.notes||''
+        })) : [{'Info':'Sin ingresos'}];
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(incRows), 'Ingresos');
+
+        // Gastos Fijos
+        const fixRows = fixedExpenses.length ? fixedExpenses.map(e => ({
+            'Concepto': e.name, 'Categoría': e.category,
+            'Monto ($)': e.amount,
+            'Frecuencia': e.frequency==='monthly'?'Mensual':e.frequency==='annual'?'Anual (prorrateo)':`Anual — mes ${MONTHS_SHORT[(e.paymentMonth||1)-1]}`,
+            'Mensual Prorrateo ($)': e.frequency==='monthly'?e.amount:e.frequency==='annual'?e.amount/12:'(mes específico)',
+            'Notas': e.notes||''
+        })) : [{'Info':'Sin gastos fijos'}];
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(fixRows), 'Gastos Fijos');
+
+        // Flujo Mensual
+        const year = new Date().getFullYear();
+        const totalBudget = Object.values(budgets).reduce((s,b)=>s+b,0);
+        let cumBal = 0;
+        const flowRows = Array.from({length:12},(_,i)=>{
+            const mn = i+1;
+            const ms = `${year}-${String(mn).padStart(2,'0')}`;
+            const inc = (incomes.length>0?calcMonthlyIncome(incomes,mn):0) + transactions.filter(t=>t.date.startsWith(ms)&&t.category==='income').reduce((s,t)=>s+t.amount,0);
+            const vari = transactions.filter(t=>t.date.startsWith(ms)&&isVariableTx(t)).reduce((s,t)=>s+t.amount,0)||totalBudget;
+            const sav = transactions.filter(t=>t.date.startsWith(ms)&&t.category==='savings').reduce((s,t)=>s+t.amount,0);
+            const fixedMn = calcFixedForMonth(fixedExpenses, mn);
+            const bal = inc - fixedMn - vari - sav;
+            cumBal += bal;
+            return { 'Mes':MONTHS_SHORT[i], 'Ingresos ($)':Math.round(inc), 'Gastos Fijos ($)':Math.round(fixedMn), 'Gastos Variables ($)':Math.round(vari), 'Ahorro ($)':Math.round(sav), 'Saldo Libre ($)':Math.round(bal), 'Balance Acumulado ($)':Math.round(cumBal) };
+        });
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(flowRows), 'Flujo Mensual');
+
+        // Deudas
+        const debtRows = debts.length ? debts.map(d => ({
+            'Deuda': d.name, 'Tipo': d.type, 'Saldo ($)': d.balance,
+            'Cuota Mensual ($)': d.payment, 'Tasa Anual (%)': d.rate,
+            'Meses para cancelar': calcPayoffMonths(d.balance,d.payment,d.rate)||'-',
+            'Notas': d.notes||''
+        })) : [{'Info':'Sin deudas'}];
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(debtRows), 'Deudas');
+
+        // Metas
+        const goalRows = goals.length ? goals.map(g => ({
+            'Meta': g.name, 'Objetivo ($)': g.target, 'Progreso ($)': g.progress,
+            '% Completado': `${Math.round((g.progress/g.target)*100)}%`, 'Fecha Límite': g.deadline
+        })) : [{'Info':'Sin metas'}];
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(goalRows), 'Metas');
+
+        // Fondo Emergencia
+        const efTotal = (emergencyFund.housing||0)+(emergencyFund.utilities||0)+(emergencyFund.food||0)+(emergencyFund.transport||0)+(emergencyFund.health||0)+(emergencyFund.other||0);
+        const efMeta = efTotal*(emergencyFund.targetMonths||6);
+        const efRows = [
+            {'Concepto':'Vivienda (mensual)','Monto ($)':emergencyFund.housing||0},
+            {'Concepto':'Servicios (mensual)','Monto ($)':emergencyFund.utilities||0},
+            {'Concepto':'Alimentación (mensual)','Monto ($)':emergencyFund.food||0},
+            {'Concepto':'Transporte (mensual)','Monto ($)':emergencyFund.transport||0},
+            {'Concepto':'Salud (mensual)','Monto ($)':emergencyFund.health||0},
+            {'Concepto':'Otros esenciales (mensual)','Monto ($)':emergencyFund.other||0},
+            {'Concepto':'TOTAL ESENCIALES MENSUALES','Monto ($)':efTotal},
+            {'Concepto':'Meses de cobertura objetivo','Monto ($)':emergencyFund.targetMonths||6},
+            {'Concepto':'META DEL FONDO ($)','Monto ($)':efMeta},
+            {'Concepto':'Saldo actual ($)','Monto ($)':emergencyFund.currentBalance||0},
+            {'Concepto':'% completado','Monto ($)':efMeta>0?`${((emergencyFund.currentBalance||0)/efMeta*100).toFixed(1)}%`:'0%'},
+        ];
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(efRows), 'Fondo Emergencia');
+
+        XLSX.writeFile(wb, `finanzas-pro-${currentMonth}.xlsx`);
+    };
+
+    if (loading) return (
+        <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}>
+            <div className="text-2xl font-serif text-cyan-400">Cargando finanzas...</div>
+        </div>
+    );
+
+    return (
+        <div>
+            <Header view={view} setView={setView} onExportJSON={exportJSON} onExportXLSX={exportXLSX} onImportJSON={importJSON} />
+            <main className="container py-8">
+                {view==='dashboard' && <Dashboard transactions={transactions} categories={categories} budgets={budgets} currentMonth={currentMonth} incomes={incomes} fixedExpenses={fixedExpenses} debts={debts} goals={goals} emergencyFund={emergencyFund} />}
+                {view==='transactions' && <TransactionsView transactions={transactions} categories={categories} fixedExpenses={fixedExpenses} onAdd={addTransaction} onDelete={deleteTransaction} onEdit={updateTransaction} onAddCategory={addCategory} />}
+                {view==='budget' && <BudgetView budgets={budgets} categories={categories} transactions={transactions} currentMonth={currentMonth} onUpdate={updateBudget} onAddCategory={addCategory} />}
+                {view==='goals' && <GoalsView goals={goals} onAdd={addGoal} onUpdateGoal={updateGoal} onDeleteGoal={deleteGoal} />}
+                {view==='incomes' && <IncomesView incomes={incomes} onSave={saveIncomes} />}
+                {view==='fixed-expenses' && <FixedExpensesView fixedExpenses={fixedExpenses} onSave={saveFixed} />}
+                {view==='cashflow' && <CashFlowView incomes={incomes} fixedExpenses={fixedExpenses} transactions={transactions} budgets={budgets} currentMonth={currentMonth} />}
+                {view==='debts' && <DebtsView debts={debts} onSave={saveDebts} />}
+                {view==='emergency' && <EmergencyFundView fund={emergencyFund} onSave={saveEF} />}
+                {view==='simulator' && <SimulatorView incomes={incomes} fixedExpenses={fixedExpenses} budgets={budgets} debts={debts} transactions={transactions} categories={categories} currentMonth={currentMonth} goals={goals} emergencyFund={emergencyFund} />}
+            </main>
+        </div>
+    );
+}
+
+// ── HEADER ────────────────────────────────────────────────────────────
+function Header({ view, setView, onExportJSON, onExportXLSX, onImportJSON }) {
+    const navBtn = (v, icon, label) => (
+        <button onClick={() => setView(v)} className={view===v?'nav-btn active':'nav-btn'}>{icon} {label}</button>
+    );
+    const fileInputRef = React.useRef(null);
+    return (
+        <header className="header">
+            <div className="container" style={{paddingTop:'0.75rem',paddingBottom:'0.75rem'}}>
+                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'0.625rem'}}>
+                    <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                        <div style={{width:'2.25rem',height:'2.25rem',borderRadius:'0.625rem',background:'linear-gradient(135deg,#22d3ee,#3b82f6)',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                            <span style={{fontSize:'1.25rem'}}>💰</span>
+                        </div>
+                        <div>
+                            <h1 className="text-xl font-serif font-bold gradient-text">Finanzas Pro</h1>
+                            <p className="text-xs text-slate-500">Tu asistente financiero inteligente</p>
+                        </div>
+                    </div>
+                    <div style={{display:'flex',gap:'0.5rem'}}>
+                        <input type="file" accept=".json" ref={fileInputRef} onChange={onImportJSON} style={{display:'none'}} />
+                        <button onClick={()=>fileInputRef.current?.click()} className="btn btn-secondary" style={{fontSize:'0.8rem',padding:'0.375rem 0.75rem'}}>⬆️ Importar</button>
+                        <button onClick={onExportJSON} className="btn btn-secondary" style={{fontSize:'0.8rem',padding:'0.375rem 0.75rem'}}>⬇️ JSON</button>
+                        <button onClick={onExportXLSX} className="btn btn-primary" style={{fontSize:'0.8rem',padding:'0.375rem 0.75rem'}}>📊 Excel</button>
+                    </div>
+                </div>
+                <nav style={{display:'flex',gap:'0.25rem',flexWrap:'wrap',alignItems:'center'}}>
+                    {navBtn('dashboard','📊','Dashboard')}
+                    {navBtn('transactions','💵','Transacciones')}
+                    {navBtn('budget','🏷️','Presupuesto')}
+                    {navBtn('goals','🎯','Metas')}
+                    <div className="nav-divider" />
+                    {navBtn('incomes','💰','Ingresos')}
+                    {navBtn('fixed-expenses','📋','Gastos Fijos')}
+                    {navBtn('cashflow','📅','Flujo Mensual')}
+                    {navBtn('debts','💳','Deudas')}
+                    {navBtn('emergency','🚨','Emergencia')}
+                    <div className="nav-divider" />
+                    {navBtn('simulator','🧮','Simulador')}
+                </nav>
+            </div>
+        </header>
+    );
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────
+function Dashboard({ transactions, categories, budgets, currentMonth, incomes, fixedExpenses, debts, goals, emergencyFund }) {
+    // All analytics are computed fresh on every render — alerts auto-clear when data changes
+    const predictor = useMemo(() => new PredictionEngine(transactions, categories), [transactions, categories]);
+    const analytics = useMemo(() => new SmartAnalytics(transactions, categories, budgets, incomes, fixedExpenses, debts, emergencyFund, currentMonth), [transactions, categories, budgets, incomes, fixedExpenses, debts, emergencyFund, currentMonth]);
+
+    const now = new Date();
+    const currentMonthNum = now.getMonth() + 1;
+    const thisMonthTx = transactions.filter(t => t.date.startsWith(currentMonth));
+    const totalSpent = thisMonthTx.filter(t => isVariableTx(t)).reduce((s,t)=>s+t.amount,0);
+    const totalFixedPaid = thisMonthTx.filter(t => t.fixedExpenseId).reduce((s,t)=>s+t.amount,0);
+    const totalIncomeTx = thisMonthTx.filter(t=>t.category==='income').reduce((s,t)=>s+t.amount,0);
+    const totalIncomeFixed = incomes.length > 0 ? calcMonthlyIncome(incomes, currentMonthNum) : 0;
+    const totalIncome = totalIncomeFixed + totalIncomeTx;
+    const totalBudget = Object.values(budgets).reduce((s,b)=>s+b,0);
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+    const daysRemaining = daysInMonth - now.getDate();
+    const budgetRemaining = totalBudget - totalSpent;
+    const canSpendToday = daysRemaining > 0 ? Math.round(budgetRemaining / daysRemaining) : 0;
+
+    const alerts = predictor.generateAlerts(budgets, currentMonth);
+    const health = analytics.healthScore();
+    const anomalies = analytics.detectAnomalies();
+    const insights = analytics.generateInsights();
+    const prediction = analytics.predictMonthEnd();
+
+    const monthlyFixed = calcMonthlyFixed(fixedExpenses);
+    const needsAmt = thisMonthTx.filter(t=>NEEDS_CATS.includes(t.category) && !t.fixedExpenseId).reduce((s,t)=>s+t.amount,0) + monthlyFixed;
+    const wantsAmt = thisMonthTx.filter(t=>WANTS_CATS.includes(t.category) && !t.fixedExpenseId).reduce((s,t)=>s+t.amount,0);
+    const savingsAmt = thisMonthTx.filter(t=>t.category==='savings').reduce((s,t)=>s+t.amount,0) + debts.reduce((s,d)=>s+(d.payment||0),0);
+    const needsPct = totalIncome > 0 ? (needsAmt/totalIncome)*100 : 0;
+    const wantsPct = totalIncome > 0 ? (wantsAmt/totalIncome)*100 : 0;
+    const savingsPct = totalIncome > 0 ? (savingsAmt/totalIncome)*100 : 0;
+
+    const ruleBar = (label, pct, target, color) => {
+        const over = pct > target;
+        const fillColor = over ? '#ef4444' : pct > target*0.85 ? '#f59e0b' : color;
+        return (
+            <div style={{marginBottom:'0.875rem'}}>
+                <div style={{display:'flex',justifyContent:'space-between',marginBottom:'0.375rem'}}>
+                    <span className="text-sm font-medium">{label}</span>
+                    <div style={{display:'flex',gap:'0.75rem',alignItems:'center'}}>
+                        <span style={{fontSize:'0.75rem',color:'#64748b'}}>Objetivo: {target}%</span>
+                        <span style={{fontSize:'0.875rem',fontWeight:700,color: over?'#fca5a5':fillColor}}>{fmtDec(pct)}%</span>
+                    </div>
+                </div>
+                <div className="rule-bar-track">
+                    <div className="rule-bar-fill" style={{width:`${Math.min(pct,100)}%`,background:fillColor}}>
+                        {pct >= 8 && `${Math.round(pct)}%`}
+                    </div>
+                    <div style={{position:'absolute',top:0,bottom:0,left:`${target}%`,width:'2px',background:'rgba(255,255,255,0.3)'}} />
+                </div>
+            </div>
+        );
+    };
+
+    const totalDebt = debts.reduce((s,d)=>s+(d.balance||0),0);
+    const monthlyDebtPayment = debts.reduce((s,d)=>s+(d.payment||0),0);
+
+    // Health score arc
+    const scoreArc = (score, color) => {
+        const r = 54, cx = 60, cy = 60;
+        const startAngle = -225, endAngle = 45;
+        const range = endAngle - startAngle;
+        const angle = startAngle + (score / 100) * range;
+        const toRad = a => (a * Math.PI) / 180;
+        const x1 = cx + r * Math.cos(toRad(startAngle));
+        const y1 = cy + r * Math.sin(toRad(startAngle));
+        const x2 = cx + r * Math.cos(toRad(angle));
+        const y2 = cy + r * Math.sin(toRad(angle));
+        const largeArc = (angle - startAngle) > 180 ? 1 : 0;
+        return (
+            <svg viewBox="0 0 120 120" style={{width:'120px',height:'120px'}}>
+                <path d={`M ${cx+r*Math.cos(toRad(startAngle))} ${cy+r*Math.sin(toRad(startAngle))} A ${r} ${r} 0 1 1 ${cx+r*Math.cos(toRad(endAngle))} ${cy+r*Math.sin(toRad(endAngle))}`} fill="none" stroke="rgba(51,65,85,0.5)" strokeWidth="8" strokeLinecap="round" />
+                {score > 0 && <path d={`M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`} fill="none" stroke={color} strokeWidth="8" strokeLinecap="round" />}
+                <text x={cx} y={cy-4} textAnchor="middle" fill={color} fontSize="26" fontWeight="700" fontFamily="'Crimson Pro',serif">{score}</text>
+                <text x={cx} y={cy+14} textAnchor="middle" fill="#94a3b8" fontSize="9">de 100</text>
+            </svg>
+        );
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="hero-card">
+                <div style={{position:'relative',zIndex:1}}>
+                    <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.5rem'}}>
+                        <span style={{fontSize:'1.25rem'}}>⚡</span>
+                        <span className="text-sm text-cyan-400 font-medium">Podés gastar hoy</span>
+                    </div>
+                    <div className="text-6xl font-serif font-bold gradient-text">${fmt(Math.max(0, canSpendToday))}</div>
+                    <div style={{marginTop:'1rem',display:'flex',gap:'1.5rem',flexWrap:'wrap'}} className="text-sm">
+                        <div><span className="text-slate-400">Gasto variable:</span><span className="ml-2 text-slate-200 font-semibold">${fmt(totalSpent)}</span></div>
+                        <div><span className="text-slate-400">Gastos fijos pagados:</span><span className="ml-2 text-purple-400 font-semibold">${fmt(totalFixedPaid)}</span></div>
+                        <div><span className="text-slate-400">Presupuesto variable:</span><span className="ml-2 text-slate-200 font-semibold">${fmt(totalBudget)}</span></div>
+                        <div><span className="text-slate-400">Días restantes:</span><span className="ml-2 text-slate-200 font-semibold">{daysRemaining}</span></div>
+                        {totalIncome > 0 && <div><span className="text-slate-400">Ingreso total:</span><span className="ml-2 text-green-300 font-semibold">${fmt(totalIncome)}</span>{totalIncomeTx > 0 && totalIncomeFixed > 0 && <span className="text-xs text-slate-500 ml-1">(fijo: ${fmt(totalIncomeFixed)} + extra: ${fmt(totalIncomeTx)})</span>}</div>}
+                    </div>
+                    {prediction && (
+                        <div style={{marginTop:'0.75rem',padding:'0.5rem 0.75rem',background: prediction.willExceed ? 'rgba(239,68,68,0.1)' : 'rgba(34,197,94,0.1)',border:`1px solid ${prediction.willExceed?'rgba(239,68,68,0.2)':'rgba(34,197,94,0.2)'}`,borderRadius:'0.5rem',display:'inline-flex',alignItems:'center',gap:'0.5rem'}}>
+                            <span>{prediction.willExceed ? '📉' : '📈'}</span>
+                            <span className="text-xs" style={{color:prediction.willExceed?'#fca5a5':'#86efac'}}>
+                                Proyección fin de mes: ${fmt(prediction.projected)} ({prediction.willExceed ? `$${fmt(prediction.excess)} sobre presupuesto` : 'dentro del presupuesto'})
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* KPI Cards */}
+            <div className="grid grid-cols-1 md-grid-cols-4 gap-4">
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">Balance Neto</div>
+                    <div className="text-2xl font-serif font-bold" style={{color:totalIncome-totalSpent-totalFixedPaid>=0?'#86efac':'#fca5a5'}}>${fmt(totalIncome-totalSpent-totalFixedPaid)}</div>
+                    <div className="text-xs mt-1" style={{color:totalIncome-totalSpent-totalFixedPaid>=0?'#22c55e':'#ef4444'}}>{totalIncome-totalSpent-totalFixedPaid>=0?'📈 Positivo':'📉 Negativo'}</div>
+                </div>
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">Total Ingresos</div>
+                    <div className="text-2xl font-serif font-bold text-green-300">${fmt(totalIncome)}</div>
+                    <div className="text-xs text-slate-500 mt-1">{totalIncomeFixed>0?`Fijo: $${fmt(totalIncomeFixed)}`:''}{totalIncomeTx>0?`${totalIncomeFixed>0?' + ':''}Extra: $${fmt(totalIncomeTx)}`:''}{totalIncome===0?'sin ingresos':''}</div>
+                </div>
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">Total Deudas</div>
+                    <div className="text-2xl font-serif font-bold text-red-300">${fmt(totalDebt)}</div>
+                    <div className="text-xs text-slate-500 mt-1">Cuota: ${fmt(monthlyDebtPayment)}/mes</div>
+                </div>
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">Gasto Variable</div>
+                    <div className="text-2xl font-serif font-bold text-cyan-400">${fmt(totalSpent)}</div>
+                    <div className="text-xs text-slate-500 mt-1">Fijos: ${fmt(monthlyFixed)}/mes · Pagados: ${fmt(totalFixedPaid)}</div>
+                </div>
+            </div>
+
+            {/* Health Score + Alerts row */}
+            <div className="grid grid-cols-1 md-grid-cols-2 gap-6">
+                {/* Health Score */}
+                <div className="card">
+                    <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'1rem'}}>
+                        <span style={{fontSize:'1.25rem'}}>🧠</span>
+                        <h2 className="text-lg font-semibold">Salud Financiera</h2>
+                        <span className="badge" style={{background:`${health.color}22`,color:health.color}}>{health.label}</span>
+                    </div>
+                    <div style={{display:'flex',alignItems:'center',gap:'1.5rem'}}>
+                        {scoreArc(health.total, health.color)}
+                        <div style={{flex:1}} className="space-y-3">
+                            {health.scores.map(s => (
+                                <div key={s.name}>
+                                    <div style={{display:'flex',justifyContent:'space-between',marginBottom:'0.2rem'}}>
+                                        <span className="text-xs text-slate-400">{s.icon} {s.name}</span>
+                                        <span className="text-xs font-semibold" style={{color:s.score>=s.max*0.7?'#86efac':s.score>=s.max*0.4?'#fcd34d':'#fca5a5'}}>{s.score}/{s.max}</span>
+                                    </div>
+                                    <div style={{height:'4px',background:'rgba(15,23,42,0.7)',borderRadius:'9999px',overflow:'hidden'}}>
+                                        <div style={{height:'100%',width:`${(s.score/s.max)*100}%`,background:s.score>=s.max*0.7?'#22c55e':s.score>=s.max*0.4?'#f59e0b':'#ef4444',borderRadius:'9999px',transition:'width 0.5s'}} />
+                                    </div>
+                                    {s.note && <span className="text-xs text-slate-500">{s.note}</span>}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Alerts — REACTIVE: auto-clear when resolved */}
+                <div className="card">
+                    <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'1rem'}}>
+                        <span style={{fontSize:'1.25rem'}}>🔔</span>
+                        <h2 className="text-lg font-semibold">Alertas</h2>
+                        {alerts.length > 0 ? <span className="badge badge-red">{alerts.length}</span> : <span className="badge badge-green">0</span>}
+                    </div>
+                    {alerts.length > 0 ? (
+                        <div className="space-y-3">
+                            {alerts.slice(0,5).map((alert,idx) => (
+                                <div key={`${alert.category}-${alert.type}`} className={`alert alert-${alert.type}`}>
+                                    <span>{alert.type==='danger'?'🔴':alert.type==='warning'?'🟡':'🔵'}</span>
+                                    <span className="text-sm">{alert.message}</span>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div style={{textAlign:'center',padding:'2rem 0'}}>
+                            <div style={{fontSize:'2.5rem',marginBottom:'0.75rem'}}>✅</div>
+                            <p className="text-slate-400 text-sm">Todo en orden. Seguís dentro del presupuesto.</p>
+                            <p className="text-xs text-slate-500 mt-1">Las alertas aparecen y desaparecen automáticamente según tus gastos.</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md-grid-cols-2 gap-6">
+                {/* Regla 50/30/20 */}
+                <div className="card">
+                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1.25rem'}}>
+                        <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                            <span style={{fontSize:'1.25rem'}}>⚖️</span>
+                            <h2 className="text-lg font-semibold">Regla 50/30/20</h2>
+                        </div>
+                        {totalIncome === 0 && <span className="badge badge-amber">Configura ingresos</span>}
+                    </div>
+                    {totalIncome > 0 ? (
+                        <div>
+                            {ruleBar('🏠 Necesidades', needsPct, 50, '#60a5fa')}
+                            {ruleBar('🎬 Deseos', wantsPct, 30, '#c084fc')}
+                            {ruleBar('🏦 Ahorro / Deuda', savingsPct, 20, '#22c55e')}
+                            <div className="text-xs text-slate-500 mt-3" style={{borderTop:'1px solid #1e293b',paddingTop:'0.75rem'}}>
+                                La línea blanca marca el objetivo. Rojo = por encima del límite recomendado.
+                            </div>
+                        </div>
+                    ) : (
+                        <div style={{textAlign:'center',padding:'2rem 0'}}>
+                            <div style={{fontSize:'2.5rem',marginBottom:'0.75rem'}}>📊</div>
+                            <p className="text-slate-400 text-sm">Registrá tus ingresos en la sección <strong className="text-cyan-400">Ingresos</strong> para ver este análisis.</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Smart Insights */}
+                <div className="card">
+                    <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'1rem'}}>
+                        <span style={{fontSize:'1.25rem'}}>💡</span>
+                        <h2 className="text-lg font-semibold">Insights Inteligentes</h2>
+                    </div>
+                    {insights.length > 0 ? (
+                        <div className="space-y-3">
+                            {insights.map((insight, idx) => {
+                                const colors = { warning:'rgba(245,158,11,0.1)', danger:'rgba(239,68,68,0.1)', success:'rgba(34,197,94,0.1)', info:'rgba(59,130,246,0.1)', tip:'rgba(6,182,212,0.1)' };
+                                const borders = { warning:'rgba(245,158,11,0.2)', danger:'rgba(239,68,68,0.2)', success:'rgba(34,197,94,0.2)', info:'rgba(59,130,246,0.2)', tip:'rgba(6,182,212,0.2)' };
+                                const textColors = { warning:'#fcd34d', danger:'#fca5a5', success:'#86efac', info:'#93c5fd', tip:'#22d3ee' };
+                                return (
+                                    <div key={idx} style={{padding:'0.625rem 0.75rem',background:colors[insight.type]||colors.info,border:`1px solid ${borders[insight.type]||borders.info}`,borderRadius:'0.5rem',display:'flex',alignItems:'flex-start',gap:'0.5rem'}}>
+                                        <span style={{flexShrink:0}}>{insight.icon}</span>
+                                        <span className="text-xs" style={{color:textColors[insight.type]||textColors.info,lineHeight:1.5}}>{insight.text}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div style={{textAlign:'center',padding:'2rem 0'}}>
+                            <div style={{fontSize:'2.5rem',marginBottom:'0.75rem'}}>🤖</div>
+                            <p className="text-slate-400 text-sm">Agregá transacciones e ingresos para recibir insights personalizados.</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Anomalies */}
+            {anomalies.length > 0 && (
+                <div className="card">
+                    <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'1rem'}}>
+                        <span style={{fontSize:'1.25rem'}}>🔍</span>
+                        <h2 className="text-lg font-semibold">Gastos Inusuales Detectados</h2>
+                        <span className="badge badge-amber">{anomalies.length}</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-4">Transacciones que son significativamente más altas que tu promedio en esa categoría.</p>
+                    <div className="space-y-3">
+                        {anomalies.map((a, idx) => (
+                            <div key={idx} style={{padding:'0.75rem',background:'rgba(245,158,11,0.05)',border:'1px solid rgba(245,158,11,0.15)',borderRadius:'0.5rem',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'0.5rem'}}>
+                                <div>
+                                    <div className="font-medium text-sm">{a.tx.description}</div>
+                                    <div className="text-xs text-slate-500">{a.catName} · {new Date(a.tx.date+'T12:00:00').toLocaleDateString('es')}</div>
+                                </div>
+                                <div style={{textAlign:'right'}}>
+                                    <div className="font-bold text-amber-300">${fmt(a.tx.amount)}</div>
+                                    <div className="text-xs text-slate-500">Promedio: ${fmt(a.mean)} ({a.pctAbove}% mayor)</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Quick start if no data */}
+            {transactions.length === 0 && incomes.length === 0 && (
+                <div className="card">
+                    <h2 className="text-lg font-semibold mb-4">🚀 Primeros pasos</h2>
+                    <div className="space-y-3">
+                        <div style={{padding:'1rem',background:'rgba(6,182,212,0.1)',border:'1px solid rgba(6,182,212,0.2)',borderRadius:'0.5rem'}}>
+                            <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.5rem'}}><span>💰</span><span className="font-semibold text-cyan-400">1. Registrá tus ingresos</span></div>
+                            <p className="text-sm text-slate-300">Ve a "Ingresos" y agrega tu sueldo y otras fuentes de ingreso.</p>
+                        </div>
+                        <div style={{padding:'1rem',background:'rgba(59,130,246,0.1)',border:'1px solid rgba(59,130,246,0.2)',borderRadius:'0.5rem'}}>
+                            <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.5rem'}}><span>📋</span><span className="font-semibold text-blue-400">2. Configurá gastos fijos</span></div>
+                            <p className="text-sm text-slate-300">Alquiler, servicios, suscripciones — los gastos que se repiten cada mes.</p>
+                        </div>
+                        <div style={{padding:'1rem',background:'rgba(139,92,246,0.1)',border:'1px solid rgba(139,92,246,0.2)',borderRadius:'0.5rem'}}>
+                            <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.5rem'}}><span>💵</span><span className="font-semibold text-purple-400">3. Registrá transacciones</span></div>
+                            <p className="text-sm text-slate-300">Llevá el registro de tus gastos variables del día a día.</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ── TRANSACTIONS VIEW ─────────────────────────────────────────────────
+function TransactionsView({ transactions, categories, fixedExpenses, onAdd, onDelete, onEdit, onAddCategory }) {
+    const [showForm, setShowForm] = useState(false);
+    const [editingTx, setEditingTx] = useState(null);
+    const [formData, setFormData] = useState({ description:'', amount:'', category:'', date: new Date().toISOString().split('T')[0], fixedExpenseId:'' });
+    const [showNewCat, setShowNewCat] = useState(false);
+    const [newCat, setNewCat] = useState({ name:'', icon:'📌', color:'#64748b' });
+    const formRef = React.useRef(null);
+
+    const openNew = () => {
+        setEditingTx(null);
+        setFormData({ description:'', amount:'', category:'', date: new Date().toISOString().split('T')[0], fixedExpenseId:'' });
+        setShowForm(true);
+    };
+    const openNewFromFixed = (exp) => {
+        setEditingTx(null);
+        setFormData({ description: exp.name, amount: String(exp.amount), category:'', date: new Date().toISOString().split('T')[0], fixedExpenseId: exp.id });
+        setShowForm(true);
+        setTimeout(() => formRef.current?.scrollIntoView({ behavior:'smooth', block:'nearest' }), 100);
+    };
+    const openEdit = (tx) => {
+        setEditingTx(tx.id);
+        setFormData({ description: tx.description, amount: String(tx.amount), category: tx.category, date: tx.date, fixedExpenseId: tx.fixedExpenseId || '' });
+        setShowForm(true);
+        setTimeout(() => formRef.current?.scrollIntoView({ behavior:'smooth', block:'nearest' }), 100);
+    };
+    const handleFixedSelect = (expId) => {
+        if (expId) {
+            const exp = fixedExpenses.find(e => e.id === expId);
+            if (exp) {
+                setFormData({ ...formData, fixedExpenseId: expId, description: exp.name, amount: String(exp.amount) });
+                return;
+            }
+        }
+        setFormData({ ...formData, fixedExpenseId: '' });
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const parsed = parseFloat(formData.amount);
+        if (isNaN(parsed) || parsed <= 0) return;
+        const txData = {...formData, amount: parsed};
+        if (!txData.fixedExpenseId) delete txData.fixedExpenseId;
+        if (editingTx) {
+            onEdit(editingTx, txData);
+        } else {
+            onAdd(txData);
+        }
+        setFormData({ description:'', amount:'', category:'', date: new Date().toISOString().split('T')[0], fixedExpenseId:'' });
+        setShowForm(false);
+        setEditingTx(null);
+    };
+    const handleCancel = () => { setShowForm(false); setEditingTx(null); };
+    const handleAddCategory = () => {
+        if (!newCat.name.trim()) return;
+        const id = newCat.name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+        onAddCategory({ id, name: newCat.name, icon: newCat.icon, color: newCat.color });
+        setNewCat({ name:'', icon:'📌', color:'#64748b' });
+        setShowNewCat(false);
+    };
+
+    const openNewIncome = () => {
+        setEditingTx(null);
+        setFormData({ description:'', amount:'', category:'income', date: new Date().toISOString().split('T')[0], fixedExpenseId:'' });
+        setShowForm(true);
+        setTimeout(() => formRef.current?.scrollIntoView({ behavior:'smooth', block:'nearest' }), 100);
+    };
+
+    // Check which fixed expenses have been paid this month
+    const currentMonth = new Date().toISOString().substring(0,7);
+    const paidFixedIds = new Set(transactions.filter(t => t.fixedExpenseId && t.date.startsWith(currentMonth)).map(t => t.fixedExpenseId));
+    const monthlyFixed = fixedExpenses.filter(e => e.frequency === 'monthly');
+    const unpaidFixed = monthlyFixed.filter(e => !paidFixedIds.has(e.id));
+
+    // Income summary this month
+    const incomeTxThisMonth = transactions.filter(t => t.category === 'income' && t.date.startsWith(currentMonth));
+    const totalIncomeTxMonth = incomeTxThisMonth.reduce((s,t)=>s+t.amount,0);
+
+    return (
+        <div className="space-y-6">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'0.5rem'}}>
+                <h1 className="text-3xl font-serif font-bold">Transacciones</h1>
+                <div style={{display:'flex',gap:'0.5rem'}}>
+                    <button onClick={openNewIncome} className="btn" style={{background:'rgba(34,197,94,0.15)',color:'#86efac',border:'1px solid rgba(34,197,94,0.3)'}}>💵 Ingreso Extra</button>
+                    <button onClick={openNew} className="btn btn-primary">➕ Nuevo Gasto</button>
+                </div>
+            </div>
+
+            {/* Extra income summary */}
+            {totalIncomeTxMonth > 0 && (
+                <div style={{padding:'0.75rem 1rem',background:'rgba(34,197,94,0.08)',border:'1px solid rgba(34,197,94,0.2)',borderRadius:'0.75rem',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'0.5rem'}}>
+                    <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                        <span>💵</span>
+                        <span className="text-sm text-green-300">Ingresos extra este mes: <strong>${fmt(totalIncomeTxMonth)}</strong></span>
+                        <span className="text-xs text-slate-500">({incomeTxThisMonth.length} registros)</span>
+                    </div>
+                </div>
+            )}
+
+            {/* Unpaid fixed expenses reminder */}
+            {unpaidFixed.length > 0 && (
+                <div className="card" style={{borderColor:'rgba(245,158,11,0.3)'}}>
+                    <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.75rem'}}>
+                        <span style={{fontSize:'1.1rem'}}>📋</span>
+                        <h3 className="font-semibold text-sm">Gastos Fijos pendientes de registrar este mes</h3>
+                        <span className="badge badge-amber">{unpaidFixed.length}</span>
+                    </div>
+                    <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+                        {unpaidFixed.map(exp => (
+                            <button key={exp.id} onClick={() => openNewFromFixed(exp)}
+                                style={{padding:'0.4rem 0.75rem',background:'rgba(245,158,11,0.1)',border:'1px solid rgba(245,158,11,0.25)',borderRadius:'0.5rem',color:'#fcd34d',cursor:'pointer',fontSize:'0.8rem',display:'flex',alignItems:'center',gap:'0.375rem',transition:'all 0.2s'}}
+                                onMouseOver={e=>e.currentTarget.style.background='rgba(245,158,11,0.2)'}
+                                onMouseOut={e=>e.currentTarget.style.background='rgba(245,158,11,0.1)'}>
+                                <span>＋</span> {exp.name} <span className="text-slate-400">${fmt(exp.amount)}</span>
+                            </button>
+                        ))}
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">Hacé click para registrar el pago. Se vincula al gasto fijo y no se cuenta doble.</p>
+                </div>
+            )}
+
+            {showForm && (
+                <div className="card" ref={formRef}>
+                    <h3 className="font-semibold mb-4">{editingTx ? '✏️ Editar Transacción' : formData.category==='income' ? '💵 Registrar Ingreso Extra' : '➕ Nueva Transacción'}</h3>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        {/* Fixed expense link */}
+                        {fixedExpenses.length > 0 && (
+                            <div style={{padding:'0.75rem',background: formData.fixedExpenseId ? 'rgba(139,92,246,0.1)' : 'rgba(30,41,59,0.3)',border:`1px solid ${formData.fixedExpenseId?'rgba(139,92,246,0.3)':'rgba(51,65,85,0.3)'}`,borderRadius:'0.5rem'}}>
+                                <label className="text-xs text-slate-400 mb-2" style={{display:'block'}}>📋 ¿Es un pago de gasto fijo?</label>
+                                <select value={formData.fixedExpenseId} onChange={e=>handleFixedSelect(e.target.value)} className="input">
+                                    <option value="">No — es un gasto variable</option>
+                                    {fixedExpenses.map(exp=><option key={exp.id} value={exp.id}>{exp.name} — ${fmt(exp.amount)} ({exp.frequency==='monthly'?'Mensual':exp.frequency==='annual'?'Anual':MONTHS_SHORT[(exp.paymentMonth||1)-1]})</option>)}
+                                </select>
+                                {formData.fixedExpenseId && <p className="text-xs text-purple-400 mt-1">✓ Este pago se vinculará al gasto fijo y no se contará como gasto variable</p>}
+                            </div>
+                        )}
+                        <div className="grid grid-cols-1 md-grid-cols-2 gap-4">
+                            <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Descripción</label><input type="text" value={formData.description} onChange={e=>setFormData({...formData,description:e.target.value})} className="input" required /></div>
+                            <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Monto ($)</label><input type="text" inputMode="decimal" value={formData.amount} onChange={e=>{const v=e.target.value;if(/^[0-9]*[.,]?[0-9]*$/.test(v))setFormData({...formData,amount:v.replace(',','.')})}} className="input" required placeholder="0.00" /></div>
+                            <div>
+                                <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Categoría</label>
+                                <div style={{display:'flex',gap:'0.5rem'}}>
+                                    <select value={formData.category} onChange={e=>setFormData({...formData,category:e.target.value})} className="input" style={{flex:1}}>
+                                        <option value="">Auto-categorizar</option>
+                                        {categories.map(c=><option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
+                                    </select>
+                                    <button type="button" onClick={()=>setShowNewCat(!showNewCat)} className="btn btn-secondary" title="Nueva categoría" style={{padding:'0.5rem 0.625rem'}}>＋</button>
+                                </div>
+                            </div>
+                            <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Fecha</label><input type="date" value={formData.date} onChange={e=>setFormData({...formData,date:e.target.value})} className="input" required /></div>
+                        </div>
+                        {showNewCat && (
+                            <div style={{padding:'1rem',background:'rgba(6,182,212,0.05)',border:'1px solid rgba(6,182,212,0.2)',borderRadius:'0.5rem'}}>
+                                <div className="text-sm font-semibold text-cyan-400 mb-3">Nueva Categoría</div>
+                                <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap',alignItems:'flex-end'}}>
+                                    <div><label className="text-xs text-slate-400" style={{display:'block',marginBottom:'0.25rem'}}>Nombre</label><input type="text" value={newCat.name} onChange={e=>setNewCat({...newCat,name:e.target.value})} className="input" placeholder="Ej: Mascotas" style={{width:'10rem'}} /></div>
+                                    <div><label className="text-xs text-slate-400" style={{display:'block',marginBottom:'0.25rem'}}>Icono</label><input type="text" value={newCat.icon} onChange={e=>setNewCat({...newCat,icon:e.target.value})} className="input" style={{width:'4rem',textAlign:'center'}} /></div>
+                                    <div><label className="text-xs text-slate-400" style={{display:'block',marginBottom:'0.25rem'}}>Color</label><input type="color" value={newCat.color} onChange={e=>setNewCat({...newCat,color:e.target.value})} style={{width:'3rem',height:'2.25rem',border:'none',background:'transparent',cursor:'pointer'}} /></div>
+                                    <button type="button" onClick={handleAddCategory} className="btn btn-primary" style={{fontSize:'0.8rem'}}>Crear</button>
+                                    <button type="button" onClick={()=>setShowNewCat(false)} className="btn btn-secondary" style={{fontSize:'0.8rem'}}>Cancelar</button>
+                                </div>
+                            </div>
+                        )}
+                        <div style={{display:'flex',gap:'0.75rem'}}>
+                            <button type="submit" className="btn btn-primary">{editingTx ? '✓ Guardar' : 'Agregar'}</button>
+                            <button type="button" onClick={handleCancel} className="btn btn-secondary">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            )}
+            <div className="card">
+                {transactions.length === 0 ? (
+                    <div style={{textAlign:'center',padding:'3rem'}}><div style={{fontSize:'3rem',marginBottom:'1rem'}}>📭</div><p className="text-slate-400">No hay transacciones todavía</p></div>
+                ) : (
+                    <div style={{overflowX:'auto'}}>
+                        <table>
+                            <thead><tr><th>FECHA</th><th>DESCRIPCIÓN</th><th>CATEGORÍA</th><th style={{textAlign:'right'}}>MONTO</th><th style={{textAlign:'center'}}>ACCIONES</th></tr></thead>
+                            <tbody>
+                                {transactions.slice(0,50).map(tx => {
+                                    const cat = categories.find(c=>c.id===tx.category)||{name:tx.category,icon:'📦'};
+                                    const linkedFixed = tx.fixedExpenseId ? fixedExpenses.find(e=>e.id===tx.fixedExpenseId) : null;
+                                    const isIncome = tx.category === 'income';
+                                    return (
+                                        <tr key={tx.id} style={linkedFixed?{borderLeft:'3px solid rgba(139,92,246,0.5)'}:isIncome?{borderLeft:'3px solid rgba(34,197,94,0.5)'}:{}}>
+                                            <td className="text-sm text-slate-300">{new Date(tx.date+'T12:00:00').toLocaleDateString('es')}</td>
+                                            <td className="text-sm">
+                                                {tx.description}
+                                                {tx.autoCategorized&&<span className="badge badge-cyan ml-2">Auto</span>}
+                                                {linkedFixed&&<span className="badge badge-purple ml-2">📋 Fijo</span>}
+                                                {isIncome&&<span className="badge badge-green ml-2">💵 Ingreso</span>}
+                                            </td>
+                                            <td className="text-sm">{cat.icon} {cat.name}</td>
+                                            <td style={{textAlign:'right'}}><span className="text-xl font-serif font-semibold" style={{color:isIncome?'#86efac':linkedFixed?'#c084fc':'#22d3ee'}}>{isIncome?'+':''}${fmt(tx.amount)}</span></td>
+                                            <td style={{textAlign:'center'}}>
+                                                <div style={{display:'flex',gap:'0.5rem',justifyContent:'center'}}>
+                                                    <button onClick={()=>openEdit(tx)} className="edit-btn">✏️</button>
+                                                    <button onClick={()=>{if(window.confirm('¿Eliminar?'))onDelete(tx.id)}} className="delete-btn">🗑️</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+// ── BUDGET VIEW ───────────────────────────────────────────────────────
+function BudgetView({ budgets, categories, transactions, currentMonth, onUpdate, onAddCategory }) {
+    const [editCategory, setEditCategory] = useState(null);
+    const [editAmount, setEditAmount] = useState('');
+    const [showNewCat, setShowNewCat] = useState(false);
+    const [newCat, setNewCat] = useState({ name:'', icon:'📌', color:'#64748b' });
+    const thisMonthTx = transactions.filter(t=>t.date.startsWith(currentMonth));
+    const categoryStats = categories.filter(c=>!['income','savings'].includes(c.id)).map(cat=>{
+        const spent = thisMonthTx.filter(t=>t.category===cat.id && !t.fixedExpenseId).reduce((s,t)=>s+t.amount,0);
+        const budget = budgets[cat.id]||0;
+        return {...cat, spent, budget, percentage: budget>0?Math.round((spent/budget)*100):0};
+    }).sort((a,b)=>b.spent-a.spent);
+    const handleSave = () => { onUpdate(editCategory, parseFloat(editAmount)); setEditCategory(null); setEditAmount(''); };
+    const handleAddCategory = () => {
+        if (!newCat.name.trim()) return;
+        const id = newCat.name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+        onAddCategory({ id, name: newCat.name, icon: newCat.icon, color: newCat.color });
+        setNewCat({ name:'', icon:'📌', color:'#64748b' });
+        setShowNewCat(false);
+    };
+    return (
+        <div className="space-y-6">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'0.75rem'}}>
+                <h1 className="text-3xl font-serif font-bold">Presupuesto Mensual</h1>
+                <button onClick={()=>setShowNewCat(!showNewCat)} className="btn btn-secondary">＋ Nueva Categoría</button>
+            </div>
+            {showNewCat && (
+                <div className="card" style={{borderColor:'rgba(6,182,212,0.3)'}}>
+                    <div className="text-sm font-semibold text-cyan-400 mb-3">Nueva Categoría</div>
+                    <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap',alignItems:'flex-end'}}>
+                        <div><label className="text-xs text-slate-400" style={{display:'block',marginBottom:'0.25rem'}}>Nombre</label><input type="text" value={newCat.name} onChange={e=>setNewCat({...newCat,name:e.target.value})} className="input" placeholder="Ej: Mascotas" style={{width:'10rem'}} /></div>
+                        <div><label className="text-xs text-slate-400" style={{display:'block',marginBottom:'0.25rem'}}>Icono</label><input type="text" value={newCat.icon} onChange={e=>setNewCat({...newCat,icon:e.target.value})} className="input" style={{width:'4rem',textAlign:'center'}} /></div>
+                        <div><label className="text-xs text-slate-400" style={{display:'block',marginBottom:'0.25rem'}}>Color</label><input type="color" value={newCat.color} onChange={e=>setNewCat({...newCat,color:e.target.value})} style={{width:'3rem',height:'2.25rem',border:'none',background:'transparent',cursor:'pointer'}} /></div>
+                        <button onClick={handleAddCategory} className="btn btn-primary" style={{fontSize:'0.8rem'}}>Crear</button>
+                        <button onClick={()=>setShowNewCat(false)} className="btn btn-secondary" style={{fontSize:'0.8rem'}}>Cancelar</button>
+                    </div>
+                </div>
+            )}
+            <div className="grid gap-4">
+                {categoryStats.map(cat=>(
+                    <div key={cat.id} className="card">
+                        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'1rem',marginBottom:'1rem'}}>
+                            <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                                <div style={{fontSize:'2rem'}}>{cat.icon}</div>
+                                <div><div className="font-semibold text-lg">{cat.name}</div><div className="text-sm text-slate-400">{cat.budget>0?`${cat.percentage}% usado`:'Sin presupuesto'}</div></div>
+                            </div>
+                            <div style={{display:'flex',alignItems:'center',gap:'1rem'}}>
+                                <div style={{textAlign:'right'}}><div className="text-2xl font-serif font-bold text-cyan-400">${fmt(cat.spent)}</div><div className="text-sm text-slate-400">de ${fmt(cat.budget)}</div></div>
+                                {editCategory===cat.id ? (
+                                    <div style={{display:'flex',gap:'0.5rem'}}><input type="number" value={editAmount} onChange={e=>setEditAmount(e.target.value)} className="input" style={{width:'8rem'}} autoFocus /><button onClick={handleSave} className="btn btn-primary">✓</button></div>
+                                ) : (
+                                    <button onClick={()=>{setEditCategory(cat.id);setEditAmount(cat.budget.toString())}} className="btn btn-secondary">Editar</button>
+                                )}
+                            </div>
+                        </div>
+                        {cat.budget>0&&<div className="progress-bar"><div className={`progress-fill ${cat.percentage>100?'danger':cat.percentage>80?'warning':''}`} style={{width:`${Math.min(cat.percentage,100)}%`}} /></div>}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+// ── GOALS VIEW ────────────────────────────────────────────────────────
+function GoalsView({ goals, onAdd, onUpdateGoal, onDeleteGoal }) {
+    const [showForm, setShowForm] = useState(false);
+    const [formData, setFormData] = useState({name:'',target:'',deadline:''});
+    const [addingTo, setAddingTo] = useState(null);
+    const [addAmount, setAddAmount] = useState('');
+    const handleSubmit = (e) => { e.preventDefault(); onAdd({...formData,target:parseFloat(formData.target)}); setFormData({name:'',target:'',deadline:''}); setShowForm(false); };
+    const handleAddMoney = (goalId) => { if(!addAmount||parseFloat(addAmount)<=0)return; onUpdateGoal(goalId,parseFloat(addAmount)); setAddingTo(null); setAddAmount(''); };
+    const handleDelete = (goalId, name) => { if(window.confirm(`¿Eliminar la meta "${name}"?`)) onDeleteGoal(goalId); };
+    return (
+        <div className="space-y-6">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                <h1 className="text-3xl font-serif font-bold">Metas de Ahorro</h1>
+                <button onClick={()=>setShowForm(!showForm)} className="btn btn-primary">➕ Nueva Meta</button>
+            </div>
+            {showForm&&(
+                <div className="card">
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="grid grid-cols-1 md-grid-cols-3 gap-4">
+                            <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Nombre</label><input type="text" value={formData.name} onChange={e=>setFormData({...formData,name:e.target.value})} className="input" required /></div>
+                            <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Monto</label><input type="number" value={formData.target} onChange={e=>setFormData({...formData,target:e.target.value})} className="input" required /></div>
+                            <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Fecha límite</label><input type="date" value={formData.deadline} onChange={e=>setFormData({...formData,deadline:e.target.value})} className="input" required /></div>
+                        </div>
+                        <button type="submit" className="btn btn-primary">Crear Meta</button>
+                    </form>
+                </div>
+            )}
+            <div className="grid grid-cols-1 md-grid-cols-2 gap-6">
+                {goals.length===0 ? (
+                    <div className="card" style={{gridColumn:'1/-1',textAlign:'center',padding:'3rem'}}>
+                        <div style={{fontSize:'3rem',marginBottom:'1rem'}}>🎯</div><p className="text-slate-400">No tenés metas de ahorro. ¡Creá tu primera meta!</p>
+                    </div>
+                ) : goals.map(goal=>{
+                    const progress=(goal.progress/goal.target)*100;
+                    const isCompleted=progress>=100;
+                    return (
+                        <div key={goal.id} className="card">
+                            <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:'0.5rem',gap:'0.5rem'}}>
+                                <h3 className="text-xl font-semibold">{goal.name}</h3>
+                                <div style={{display:'flex',gap:'0.5rem',alignItems:'center',flexShrink:0}}>
+                                    {isCompleted&&<span className="badge badge-green">✓ Completada</span>}
+                                    <button onClick={()=>handleDelete(goal.id, goal.name)} className="delete-btn" title="Eliminar meta">🗑️</button>
+                                </div>
+                            </div>
+                            <div className="mb-4">
+                                <div style={{display:'flex',justifyContent:'space-between'}} className="text-sm mb-2">
+                                    <span className="text-slate-400">Progreso</span><span className="text-cyan-400 font-semibold">{Math.round(progress)}%</span>
+                                </div>
+                                <div className="progress-bar"><div className="progress-fill" style={{width:`${Math.min(progress,100)}%`}} /></div>
+                            </div>
+                            <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1rem'}}>
+                                <div><div className="text-sm text-slate-400">Ahorrado</div><div className="text-2xl font-serif font-bold text-cyan-400">${fmt(goal.progress)}</div></div>
+                                <div style={{textAlign:'right'}}><div className="text-sm text-slate-400">Objetivo</div><div className="text-lg font-semibold text-slate-300">${fmt(goal.target)}</div></div>
+                            </div>
+                            {addingTo===goal.id ? (
+                                <div style={{display:'flex',gap:'0.5rem'}}>
+                                    <input type="number" placeholder="Cantidad" value={addAmount} onChange={e=>setAddAmount(e.target.value)} className="input" style={{flex:1}} autoFocus />
+                                    <button onClick={()=>handleAddMoney(goal.id)} className="btn btn-primary">✓</button>
+                                    <button onClick={()=>{setAddingTo(null);setAddAmount('')}} className="btn btn-secondary">✕</button>
+                                </div>
+                            ) : (
+                                <button onClick={()=>setAddingTo(goal.id)} className="btn btn-primary" style={{width:'100%'}}>💰 Agregar Dinero</button>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+// ── INCOMES VIEW ──────────────────────────────────────────────────────
+function IncomesView({ incomes, onSave }) {
+    const [showForm, setShowForm] = useState(false);
+    const [editId, setEditId] = useState(null);
+    const emptyForm = { name:'', amount:'', frequency:'monthly', type:'fixed', seasonalMonths:[6,12], notes:'' };
+    const [form, setForm] = useState(emptyForm);
+
+    const monthlyTotal = incomes.reduce((sum,inc)=>{
+        const amt=inc.amount||0;
+        if(inc.frequency==='monthly') return sum+amt;
+        if(inc.frequency==='annual') return sum+amt/12;
+        if(inc.frequency==='biannual') return sum+amt/6;
+        return sum;
+    },0);
+
+    const annualTotal = incomes.reduce((sum,inc)=>{
+        const amt=inc.amount||0;
+        if(inc.frequency==='monthly') return sum+amt*12;
+        if(inc.frequency==='annual') return sum+amt;
+        if(inc.frequency==='biannual') return sum+amt*2;
+        return sum;
+    },0);
+
+    const handleSubmit = () => {
+        if(!form.name||!form.amount) return;
+        const income = {id:editId||Date.now().toString(), ...form, amount:parseFloat(form.amount)};
+        onSave(editId ? incomes.map(i=>i.id===editId?income:i) : [...incomes,income]);
+        resetForm();
+    };
+    const handleEdit = (inc) => { setEditId(inc.id); setForm({name:inc.name,amount:String(inc.amount),frequency:inc.frequency,type:inc.type,seasonalMonths:inc.seasonalMonths||[6,12],notes:inc.notes||''}); setShowForm(true); };
+    const handleDelete = (id) => { if(window.confirm('¿Eliminar este ingreso?')) onSave(incomes.filter(i=>i.id!==id)); };
+    const resetForm = () => { setShowForm(false); setEditId(null); setForm(emptyForm); };
+    const toggleMonth = (m) => {
+        const sm = form.seasonalMonths||[];
+        setForm({...form, seasonalMonths: sm.includes(m)?sm.filter(x=>x!==m):[...sm,m]});
+    };
+    const freqLabel = {monthly:'Mensual',biannual:'Semestral',annual:'Anual'};
+
+    return (
+        <div className="space-y-6">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                <h1 className="text-3xl font-serif font-bold">💰 Ingresos</h1>
+                <button onClick={()=>{resetForm();setShowForm(true)}} className="btn btn-primary">➕ Agregar</button>
+            </div>
+
+            <div className="hero-card">
+                <div style={{position:'relative',zIndex:1}}>
+                    <div className="text-sm text-cyan-400 mb-2">Ingreso Mensual Total</div>
+                    <div className="text-5xl font-serif font-bold gradient-text">${fmt(monthlyTotal)}</div>
+                    <div style={{marginTop:'1rem',display:'flex',gap:'1.5rem',flexWrap:'wrap'}} className="text-sm">
+                        <div><span className="text-slate-400">Anual estimado:</span><span className="ml-2 text-slate-200 font-semibold">${fmt(annualTotal)}</span></div>
+                        <div><span className="text-slate-400">Fuentes:</span><span className="ml-2 text-slate-200 font-semibold">{incomes.length}</span></div>
+                        <div><span className="text-slate-400">Fijos:</span><span className="ml-2 text-green-300 font-semibold">{incomes.filter(i=>i.type==='fixed').length}</span></div>
+                        <div><span className="text-slate-400">Variables:</span><span className="ml-2 text-amber-300 font-semibold">{incomes.filter(i=>i.type==='variable').length}</span></div>
+                    </div>
+                </div>
+            </div>
+
+            {showForm && (
+                <div className="card">
+                    <h3 className="font-semibold mb-4">{editId?'Editar Ingreso':'Nuevo Ingreso'}</h3>
+                    <div className="grid grid-cols-1 md-grid-cols-2 gap-4">
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Fuente de ingreso</label><input type="text" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="input" placeholder="Ej: Salario principal" /></div>
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Monto ($)</label><input type="number" value={form.amount} onChange={e=>setForm({...form,amount:e.target.value})} className="input" placeholder="0" /></div>
+                        <div>
+                            <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Frecuencia</label>
+                            <select value={form.frequency} onChange={e=>setForm({...form,frequency:e.target.value})} className="input">
+                                <option value="monthly">Mensual</option>
+                                <option value="biannual">Semestral (aguinaldo, bonos)</option>
+                                <option value="annual">Anual</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Tipo</label>
+                            <select value={form.type} onChange={e=>setForm({...form,type:e.target.value})} className="input">
+                                <option value="fixed">Fijo</option>
+                                <option value="variable">Variable</option>
+                            </select>
+                        </div>
+                        {form.frequency==='biannual' && (
+                            <div style={{gridColumn:'1/-1'}}>
+                                <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>📅 Meses de cobro — seleccioná cuándo lo recibís</label>
+                                <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+                                    {MONTHS_SHORT.map((mn,i)=>{
+                                        const m=i+1; const sel=(form.seasonalMonths||[]).includes(m);
+                                        return <button key={m} type="button" onClick={()=>toggleMonth(m)}
+                                            className="month-chip"
+                                            style={{background:sel?'rgba(6,182,212,0.2)':'transparent',borderColor:sel?'rgba(6,182,212,0.5)':'#334155',color:sel?'#22d3ee':'#64748b'}}>
+                                            {mn}
+                                        </button>;
+                                    })}
+                                </div>
+                                <p className="text-xs text-slate-500 mt-2">💡 Aguinaldo típico: Jun y Dic</p>
+                            </div>
+                        )}
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Notas</label><input type="text" value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})} className="input" placeholder="Opcional" /></div>
+                    </div>
+                    <div style={{display:'flex',gap:'0.75rem',marginTop:'1rem'}}>
+                        <button onClick={handleSubmit} className="btn btn-primary">{editId?'✓ Actualizar':'✓ Agregar'}</button>
+                        <button onClick={resetForm} className="btn btn-secondary">Cancelar</button>
+                    </div>
+                </div>
+            )}
+
+            {incomes.length===0 ? (
+                <div className="card" style={{textAlign:'center',padding:'3rem'}}>
+                    <div style={{fontSize:'3rem',marginBottom:'1rem'}}>💰</div>
+                    <p className="text-slate-400 mb-2">No hay ingresos registrados.</p>
+                    <p className="text-sm text-slate-500">Agregá tu sueldo, freelance, alquileres, aguinaldo y más.</p>
+                </div>
+            ) : (
+                <div className="card" style={{overflowX:'auto'}}>
+                    <table>
+                        <thead><tr><th>FUENTE</th><th>TIPO</th><th>FRECUENCIA</th><th style={{textAlign:'right'}}>MONTO</th><th style={{textAlign:'right'}}>EQUIV. MENSUAL</th><th style={{textAlign:'center'}}>ACCIONES</th></tr></thead>
+                        <tbody>
+                            {incomes.map(inc=>{
+                                const monthlyEq = inc.frequency==='monthly'?inc.amount:inc.frequency==='annual'?inc.amount/12:inc.amount/6;
+                                return (
+                                    <tr key={inc.id}>
+                                        <td><div className="font-medium">{inc.name}</div>{inc.notes&&<div className="text-xs text-slate-500">{inc.notes}</div>}</td>
+                                        <td><span className={`badge ${inc.type==='fixed'?'badge-blue':'badge-amber'}`}>{inc.type==='fixed'?'Fijo':'Variable'}</span></td>
+                                        <td>
+                                            <span className="text-sm text-slate-300">{freqLabel[inc.frequency]}</span>
+                                            {inc.frequency==='biannual'&&inc.seasonalMonths&&<div className="text-xs text-slate-500">{inc.seasonalMonths.map(m=>MONTHS_SHORT[m-1]).join(', ')}</div>}
+                                        </td>
+                                        <td style={{textAlign:'right'}}><span className="text-lg font-serif font-semibold text-green-300">${fmt(inc.amount)}</span></td>
+                                        <td style={{textAlign:'right'}}><span className="text-sm text-cyan-400">${fmt(monthlyEq)}/mes</span></td>
+                                        <td style={{textAlign:'center'}}>
+                                            <div style={{display:'flex',gap:'0.5rem',justifyContent:'center'}}>
+                                                <button onClick={()=>handleEdit(inc)} className="edit-btn">✏️</button>
+                                                <button onClick={()=>handleDelete(inc.id)} className="delete-btn">🗑️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ── FIXED EXPENSES VIEW ───────────────────────────────────────────────
+function FixedExpensesView({ fixedExpenses, onSave }) {
+    const [showForm, setShowForm] = useState(false);
+    const [editId, setEditId] = useState(null);
+    const emptyForm = {name:'',category:'Vivienda',amount:'',frequency:'monthly',dueDay:'',paymentMonth:6,notes:''};
+    const [form, setForm] = useState(emptyForm);
+
+    const monthlyTotal = calcMonthlyFixed(fixedExpenses);
+    const annualTotal = fixedExpenses.reduce((s,e)=>s+(e.frequency==='monthly'?(e.amount||0)*12:(e.amount||0)),0);
+    const CATS = ['Vivienda','Servicios','Suscripciones','Transporte','Seguros','Salud','Educación','Otros'];
+
+    const handleSubmit = () => {
+        if(!form.name||!form.amount) return;
+        const exp = {id:editId||Date.now().toString(),...form,amount:parseFloat(form.amount),dueDay:form.dueDay?parseInt(form.dueDay):null};
+        onSave(editId?fixedExpenses.map(e=>e.id===editId?exp:e):[...fixedExpenses,exp]);
+        resetForm();
+    };
+    const handleEdit = (e) => { setEditId(e.id); setForm({name:e.name,category:e.category,amount:String(e.amount),frequency:e.frequency,dueDay:e.dueDay||'',paymentMonth:e.paymentMonth||6,notes:e.notes||''}); setShowForm(true); };
+    const handleDelete = (id) => { if(window.confirm('¿Eliminar este gasto fijo?')) onSave(fixedExpenses.filter(e=>e.id!==id)); };
+    const resetForm = () => { setShowForm(false); setEditId(null); setForm(emptyForm); };
+
+    const grouped = CATS.reduce((acc,cat)=>{
+        acc[cat]=fixedExpenses.filter(e=>e.category===cat);
+        return acc;
+    },{});
+
+    return (
+        <div className="space-y-6">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                <h1 className="text-3xl font-serif font-bold">📋 Gastos Fijos</h1>
+                <button onClick={()=>{resetForm();setShowForm(true)}} className="btn btn-primary">➕ Agregar</button>
+            </div>
+
+            <div className="grid grid-cols-1 md-grid-cols-3 gap-4">
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">Mensual Prorrateo</div>
+                    <div className="text-2xl font-serif font-bold text-blue-300">${fmt(monthlyTotal)}</div>
+                </div>
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">Total Anual</div>
+                    <div className="text-2xl font-serif font-bold text-purple-400">${fmt(annualTotal)}</div>
+                </div>
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">Ítems registrados</div>
+                    <div className="text-2xl font-serif font-bold text-cyan-400">{fixedExpenses.length}</div>
+                </div>
+            </div>
+
+            {showForm && (
+                <div className="card">
+                    <h3 className="font-semibold mb-4">{editId?'Editar Gasto Fijo':'Nuevo Gasto Fijo'}</h3>
+                    <div className="grid grid-cols-1 md-grid-cols-2 gap-4">
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Concepto</label><input type="text" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="input" placeholder="Ej: Alquiler, Spotify..." /></div>
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Monto ($)</label><input type="number" value={form.amount} onChange={e=>setForm({...form,amount:e.target.value})} className="input" /></div>
+                        <div>
+                            <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Categoría</label>
+                            <select value={form.category} onChange={e=>setForm({...form,category:e.target.value})} className="input">
+                                {CATS.map(c=><option key={c} value={c}>{c}</option>)}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Frecuencia</label>
+                            <select value={form.frequency} onChange={e=>setForm({...form,frequency:e.target.value})} className="input">
+                                <option value="monthly">Mensual</option>
+                                <option value="annual">Anual — prorrateo (divide en 12 meses)</option>
+                                <option value="specific-month">Anual — mes específico (se descuenta de un mes puntual)</option>
+                            </select>
+                        </div>
+                        {form.frequency==='specific-month' && (
+                            <div>
+                                <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>¿En qué mes se descuenta?</label>
+                                <select value={form.paymentMonth||6} onChange={e=>setForm({...form,paymentMonth:parseInt(e.target.value)})} className="input">
+                                    {MONTHS_SHORT.map((mn,i)=><option key={i+1} value={i+1}>{mn} ({i+1})</option>)}
+                                </select>
+                                <p className="text-xs text-slate-500 mt-1">💡 Ej: seguro del auto que se paga todo en marzo → elegí Marzo</p>
+                            </div>
+                        )}
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Día de vencimiento (opcional)</label><input type="number" min="1" max="31" value={form.dueDay} onChange={e=>setForm({...form,dueDay:e.target.value})} className="input" placeholder="Ej: 10" /></div>
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Notas</label><input type="text" value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})} className="input" placeholder="Opcional" /></div>
+                    </div>
+                    <div style={{display:'flex',gap:'0.75rem',marginTop:'1rem'}}>
+                        <button onClick={handleSubmit} className="btn btn-primary">{editId?'✓ Actualizar':'✓ Agregar'}</button>
+                        <button onClick={resetForm} className="btn btn-secondary">Cancelar</button>
+                    </div>
+                </div>
+            )}
+
+            {fixedExpenses.length===0 ? (
+                <div className="card" style={{textAlign:'center',padding:'3rem'}}>
+                    <div style={{fontSize:'3rem',marginBottom:'1rem'}}>📋</div>
+                    <p className="text-slate-400 mb-2">No hay gastos fijos registrados.</p>
+                    <p className="text-sm text-slate-500">Agregá alquiler, luz, internet, seguros y todo lo que pagás regularmente.</p>
+                </div>
+            ) : (
+                CATS.map(cat=>{
+                    const items=grouped[cat]||[];
+                    if(items.length===0) return null;
+                    const catTotal=items.reduce((s,e)=>s+(e.frequency==='monthly'?e.amount:e.frequency==='annual'?e.amount/12:0),0);
+                    return (
+                        <div key={cat} className="card">
+                            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'0.875rem'}}>
+                                <h3 className="font-semibold text-slate-200">{cat}</h3>
+                                <span className="text-sm text-blue-300 font-semibold">${fmt(catTotal)}/mes</span>
+                            </div>
+                            <table>
+                                <thead><tr><th>CONCEPTO</th><th>FRECUENCIA</th><th style={{textAlign:'right'}}>MONTO</th><th style={{textAlign:'right'}}>MENSUAL</th><th style={{textAlign:'center'}}>ACCIONES</th></tr></thead>
+                                <tbody>
+                                    {items.map(exp=>(
+                                        <tr key={exp.id}>
+                                            <td>
+                                                <div className="font-medium text-sm">{exp.name}</div>
+                                                {exp.dueDay&&<div className="text-xs text-slate-500">Vence día {exp.dueDay}</div>}
+                                                {exp.notes&&<div className="text-xs text-slate-500">{exp.notes}</div>}
+                                            </td>
+                                            <td>
+                                                <span className={`badge ${exp.frequency==='monthly'?'badge-blue':exp.frequency==='annual'?'badge-purple':'badge-amber'}`}>
+                                                    {exp.frequency==='monthly'?'Mensual':exp.frequency==='annual'?'Anual / Prorrateo':`Anual — ${MONTHS_SHORT[(exp.paymentMonth||1)-1]}`}
+                                                </span>
+                                            </td>
+                                            <td style={{textAlign:'right'}}><span className="font-semibold text-slate-200">${fmt(exp.amount)}</span></td>
+                                            <td style={{textAlign:'right'}}>
+                                                {exp.frequency==='monthly' && <span className="text-sm text-cyan-400">${fmt(exp.amount)}</span>}
+                                                {exp.frequency==='annual' && <span className="text-sm text-purple-400">${fmt(exp.amount/12)}</span>}
+                                                {exp.frequency==='specific-month' && <span className="text-sm text-amber-300">en {MONTHS_SHORT[(exp.paymentMonth||1)-1]}</span>}
+                                            </td>
+                                            <td style={{textAlign:'center'}}>
+                                                <div style={{display:'flex',gap:'0.5rem',justifyContent:'center'}}>
+                                                    <button onClick={()=>handleEdit(exp)} className="edit-btn">✏️</button>
+                                                    <button onClick={()=>handleDelete(exp.id)} className="delete-btn">🗑️</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    );
+                })
+            )}
+        </div>
+    );
+}
+
+// ── CASH FLOW CHART (SVG) ─────────────────────────────────────────────
+function CashFlowChart({ chartData }) {
+    const W=760, H=280, padL=65, padR=15, padT=20, padB=50;
+    const cW=W-padL-padR, cH=H-padT-padB;
+    const slotW=cW/12;
+    const barW=10, barGap=3, groupW=3*barW+2*barGap, groupOff=(slotW-groupW)/2;
+
+    const maxInc = Math.max(...chartData.map(d=>d.income),1);
+    const maxExp = Math.max(...chartData.map(d=>d.fixed+d.variable),1);
+    const maxVal = Math.max(maxInc, maxExp, 1);
+
+    const scaleY = (v) => Math.max(0, (v/maxVal)*cH);
+    const barY = (v) => padT + cH - scaleY(v);
+
+    const fmtK = (v) => v>=1000?`${(v/1000).toFixed(0)}k`:`${v}`;
+
+    const balancePoints = chartData.map((d,i)=>{
+        const bx = padL + i*slotW + slotW/2;
+        const by = padT + cH - scaleY(Math.max(0, d.income - d.fixed - d.variable));
+        return `${bx},${by}`;
+    }).join(' ');
+
+    return (
+        <svg viewBox={`0 0 ${W} ${H}`} style={{width:'100%',height:'auto',display:'block'}}>
+            {/* Grid lines */}
+            {[0,0.25,0.5,0.75,1].map(pct=>{
+                const y=padT+cH*(1-pct);
+                return (
+                    <g key={pct}>
+                        <line x1={padL} y1={y} x2={W-padR} y2={y} stroke="rgba(71,85,105,0.35)" strokeWidth={1} strokeDasharray={pct===0?'':'4,4'} />
+                        <text x={padL-6} y={y+4} textAnchor="end" fill="#64748b" fontSize={10}>{fmtK(Math.round(maxVal*pct))}</text>
+                    </g>
+                );
+            })}
+
+            {/* Bars */}
+            {chartData.map((d,i)=>{
+                const x0=padL+i*slotW+groupOff;
+                const incH=scaleY(d.income);
+                const fixH=scaleY(d.fixed);
+                const varH=scaleY(d.variable);
+                const alpha=d.isProjected?0.45:1;
+                const cx=padL+i*slotW+slotW/2;
+                return (
+                    <g key={i}>
+                        {/* Income */}
+                        {incH>0&&<rect x={x0} y={barY(d.income)} width={barW} height={incH} fill={`rgba(34,197,94,${alpha})`} rx={2} />}
+                        {/* Fixed */}
+                        {fixH>0&&<rect x={x0+barW+barGap} y={barY(d.fixed)} width={barW} height={fixH} fill={`rgba(96,165,250,${alpha})`} rx={2} />}
+                        {/* Variable */}
+                        {varH>0&&<rect x={x0+2*(barW+barGap)} y={barY(d.variable)} width={barW} height={varH} fill={`rgba(249,115,22,${alpha})`} rx={2} />}
+                        {/* Projected marker */}
+                        {d.isProjected&&<text x={cx} y={padT+cH+15} textAnchor="middle" fill="#334155" fontSize={8}>~</text>}
+                        {/* Month label */}
+                        <text x={cx} y={H-padB+20} textAnchor="middle" fill={d.isCurrentMonth?'#22d3ee':'#64748b'} fontSize={10} fontWeight={d.isCurrentMonth?700:400}>{d.month}</text>
+                    </g>
+                );
+            })}
+
+            {/* Balance line */}
+            <polyline points={balancePoints} fill="none" stroke="#fbbf24" strokeWidth={2} strokeLinejoin="round" />
+            {chartData.map((d,i)=>{
+                const bal=d.income-d.fixed-d.variable;
+                const bx=padL+i*slotW+slotW/2;
+                const by=padT+cH-scaleY(Math.max(0,bal));
+                return <circle key={i} cx={bx} cy={by} r={3} fill="#fbbf24" />;
+            })}
+        </svg>
+    );
+}
+
+// ── CASH FLOW VIEW ────────────────────────────────────────────────────
+function CashFlowView({ incomes, fixedExpenses, transactions, budgets, currentMonth }) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const currentMonthNum = now.getMonth() + 1;
+    const totalBudget = Object.values(budgets).reduce((s,b)=>s+b,0);
+
+    const chartData = useMemo(() => {
+        let cumBal = 0;
+        return Array.from({length:12},(_,i)=>{
+            const mn=i+1;
+            const ms=`${year}-${String(mn).padStart(2,'0')}`;
+            const inc = (incomes.length>0 ? calcMonthlyIncome(incomes,mn) : 0) +
+                transactions.filter(t=>t.date.startsWith(ms)&&t.category==='income').reduce((s,t)=>s+t.amount,0);
+            const actualVar = transactions.filter(t=>t.date.startsWith(ms)&&isVariableTx(t)).reduce((s,t)=>s+t.amount,0);
+            const variable = mn<=currentMonthNum ? actualVar : (totalBudget||actualVar);
+            const fixed = calcFixedForMonth(fixedExpenses, mn);
+            const isProjected = mn > currentMonthNum;
+            const isCurrentMonth = mn === currentMonthNum;
+            const bal = inc - fixed - variable;
+            cumBal += bal;
+            return {month:MONTHS_SHORT[i], monthNum:mn, income:Math.round(inc), fixed:Math.round(fixed), variable:Math.round(variable), balance:Math.round(bal), cumBalance:Math.round(cumBal), isProjected, isCurrentMonth};
+        });
+    }, [incomes, fixedExpenses, transactions, budgets, year, currentMonthNum, totalBudget]);
+
+    const annualInc=chartData.reduce((s,d)=>s+d.income,0);
+    const annualFixed=chartData.reduce((s,d)=>s+d.fixed,0);
+    const annualVar=chartData.reduce((s,d)=>s+d.variable,0);
+    const annualBal=chartData.reduce((s,d)=>s+d.balance,0);
+
+    return (
+        <div className="space-y-6">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'1rem'}}>
+                <h1 className="text-3xl font-serif font-bold">📅 Flujo de Caja {year}</h1>
+                <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+                    {incomes.length===0&&<span className="badge badge-amber">⚠️ Configura ingresos para mejor precisión</span>}
+                    {fixedExpenses.length===0&&<span className="badge badge-blue">💡 Agrega gastos fijos</span>}
+                </div>
+            </div>
+
+            {/* Summary KPIs */}
+            <div className="grid grid-cols-1 md-grid-cols-4 gap-4">
+                <div className="kpi-card"><div className="text-xs text-slate-500 mb-1">Ingresos anuales</div><div className="text-xl font-serif font-bold text-green-300">${fmt(annualInc)}</div></div>
+                <div className="kpi-card"><div className="text-xs text-slate-500 mb-1">Gastos Fijos anuales</div><div className="text-xl font-serif font-bold text-blue-300">${fmt(annualFixed)}</div></div>
+                <div className="kpi-card"><div className="text-xs text-slate-500 mb-1">Gastos Var. anuales</div><div className="text-xl font-serif font-bold text-amber-300">${fmt(annualVar)}</div></div>
+                <div className="kpi-card"><div className="text-xs text-slate-500 mb-1">Balance anual</div><div className="text-xl font-serif font-bold" style={{color:annualBal>=0?'#86efac':'#fca5a5'}}>${fmt(annualBal)}</div></div>
+            </div>
+
+            {/* Chart */}
+            <div className="card">
+                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1rem',flexWrap:'wrap',gap:'0.75rem'}}>
+                    <h2 className="text-lg font-semibold">Comparativa Mensual</h2>
+                    <div className="chart-legend">
+                        <div className="legend-item"><div className="legend-dot" style={{background:'rgba(34,197,94,0.85)'}} /><span>Ingresos</span></div>
+                        <div className="legend-item"><div className="legend-dot" style={{background:'rgba(96,165,250,0.85)'}} /><span>Gastos Fijos</span></div>
+                        <div className="legend-item"><div className="legend-dot" style={{background:'rgba(249,115,22,0.85)'}} /><span>Gastos Variables</span></div>
+                        <div className="legend-item"><div className="legend-line" style={{background:'#fbbf24',borderRadius:1}} /><span>Saldo Libre</span></div>
+                        <div className="legend-item"><span style={{opacity:0.5,fontSize:'0.7rem'}}>~ proyectado</span></div>
+                    </div>
+                </div>
+                <div className="chart-container">
+                    <CashFlowChart chartData={chartData} />
+                </div>
+            </div>
+
+            {/* Detail table */}
+            <div className="card" style={{overflowX:'auto'}}>
+                <h2 className="text-lg font-semibold mb-4">Detalle Mensual</h2>
+                <table className="cashflow-table">
+                    <thead>
+                        <tr>
+                            <th>MES</th>
+                            {chartData.map(d=><th key={d.month} style={{color:d.isCurrentMonth?'#22d3ee':undefined}}>{d.month}{d.isProjected?' *':''}</th>)}
+                            <th>ANUAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style={{color:'#86efac'}}>💚 Ingresos</td>
+                            {chartData.map(d=><td key={d.month} className={d.isProjected?'projected':''} style={{color:'#86efac'}}>{d.income>0?`$${fmt(d.income)}`:'-'}</td>)}
+                            <td style={{color:'#86efac',fontWeight:700}}>${fmt(annualInc)}</td>
+                        </tr>
+                        <tr>
+                            <td style={{color:'#93c5fd'}}>🔵 G. Fijos</td>
+                            {chartData.map(d=><td key={d.month} className={d.isProjected?'projected':''} style={{color:'#93c5fd'}}>{d.fixed>0?`$${fmt(d.fixed)}`:'-'}</td>)}
+                            <td style={{color:'#93c5fd',fontWeight:700}}>${fmt(annualFixed)}</td>
+                        </tr>
+                        <tr>
+                            <td style={{color:'#fdba74'}}>🟠 G. Variables</td>
+                            {chartData.map(d=><td key={d.month} className={d.isProjected?'projected':''} style={{color:'#fdba74'}}>{d.variable>0?`$${fmt(d.variable)}`:'-'}</td>)}
+                            <td style={{color:'#fdba74',fontWeight:700}}>${fmt(annualVar)}</td>
+                        </tr>
+                        <tr className="total-row">
+                            <td>⚡ Saldo Libre</td>
+                            {chartData.map(d=><td key={d.month} style={{color:d.balance>=0?'#86efac':'#fca5a5',fontWeight:600}}>{d.balance>=0?'+':''}{d.balance!==0?`$${fmt(d.balance)}`:'-'}</td>)}
+                            <td style={{color:annualBal>=0?'#86efac':'#fca5a5'}}>{annualBal>=0?'+':''}{`$${fmt(annualBal)}`}</td>
+                        </tr>
+                        <tr className="total-row">
+                            <td>📈 Acumulado</td>
+                            {chartData.map(d=><td key={d.month} style={{color:'#c084fc',fontWeight:600}}>${fmt(d.cumBalance)}</td>)}
+                            <td style={{color:'#c084fc'}}>${fmt(chartData[11]?.cumBalance)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p className="text-xs text-slate-500 mt-3">* Meses proyectados usando presupuesto configurado. Los pasados usan datos reales de transacciones.</p>
+            </div>
+        </div>
+    );
+}
+
+// ── DEBTS VIEW ────────────────────────────────────────────────────────
+function DebtsView({ debts, onSave }) {
+    const [strategy, setStrategy] = useState('avalanche');
+    const [showForm, setShowForm] = useState(false);
+    const [editId, setEditId] = useState(null);
+    const emptyForm = {name:'',type:'Tarjeta crédito',balance:'',payment:'',rate:'',notes:''};
+    const [form, setForm] = useState(emptyForm);
+
+    const DEBT_TYPES = ['Tarjeta crédito','Préstamo personal','Hipoteca','Prendario (auto)','Familiar/amigo','Consumo','Otro'];
+
+    const sorted = [...debts].sort((a,b)=>{
+        if(strategy==='avalanche') return (b.rate||0)-(a.rate||0);
+        return (a.balance||0)-(b.balance||0);
+    });
+
+    const totalBalance=debts.reduce((s,d)=>s+(d.balance||0),0);
+    const totalPayment=debts.reduce((s,d)=>s+(d.payment||0),0);
+    const totalInterestAnnual=debts.reduce((s,d)=>s+(d.balance||0)*(d.rate||0)/100,0);
+
+    const handleSubmit = () => {
+        if(!form.name||!form.balance) return;
+        const debt = {id:editId||Date.now().toString(),...form,balance:parseFloat(form.balance)||0,payment:parseFloat(form.payment)||0,rate:parseFloat(form.rate)||0};
+        onSave(editId?debts.map(d=>d.id===editId?debt:d):[...debts,debt]);
+        resetForm();
+    };
+    const handleEdit = (d) => { setEditId(d.id); setForm({name:d.name,type:d.type,balance:String(d.balance),payment:String(d.payment),rate:String(d.rate),notes:d.notes||''}); setShowForm(true); };
+    const handleDelete = (id) => { if(window.confirm('¿Eliminar esta deuda?')) onSave(debts.filter(d=>d.id!==id)); };
+    const resetForm = () => { setShowForm(false); setEditId(null); setForm(emptyForm); };
+
+    return (
+        <div className="space-y-6">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                <h1 className="text-3xl font-serif font-bold">💳 Deudas</h1>
+                <button onClick={()=>{resetForm();setShowForm(true)}} className="btn btn-primary">➕ Agregar</button>
+            </div>
+
+            {/* KPIs */}
+            <div className="grid grid-cols-1 md-grid-cols-3 gap-4">
+                <div className="kpi-card"><div className="text-xs text-slate-500 mb-1">Deuda Total</div><div className="text-2xl font-serif font-bold text-red-300">${fmt(totalBalance)}</div></div>
+                <div className="kpi-card"><div className="text-xs text-slate-500 mb-1">Cuota Mensual Total</div><div className="text-2xl font-serif font-bold text-amber-300">${fmt(totalPayment)}</div></div>
+                <div className="kpi-card"><div className="text-xs text-slate-500 mb-1">Intereses Anuales Est.</div><div className="text-2xl font-serif font-bold text-red-300">${fmt(totalInterestAnnual)}</div></div>
+            </div>
+
+            {showForm && (
+                <div className="card">
+                    <h3 className="font-semibold mb-4">{editId?'Editar Deuda':'Nueva Deuda'}</h3>
+                    <div className="grid grid-cols-1 md-grid-cols-2 gap-4">
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Nombre / Acreedor</label><input type="text" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="input" placeholder="Ej: Tarjeta BBVA" /></div>
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Tipo</label><select value={form.type} onChange={e=>setForm({...form,type:e.target.value})} className="input">{DEBT_TYPES.map(t=><option key={t} value={t}>{t}</option>)}</select></div>
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Saldo Actual ($)</label><input type="number" value={form.balance} onChange={e=>setForm({...form,balance:e.target.value})} className="input" /></div>
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Cuota Mensual ($)</label><input type="number" value={form.payment} onChange={e=>setForm({...form,payment:e.target.value})} className="input" /></div>
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Tasa Interés Anual (%)</label><input type="number" step="0.1" value={form.rate} onChange={e=>setForm({...form,rate:e.target.value})} className="input" placeholder="Ej: 120" /></div>
+                        <div><label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Notas</label><input type="text" value={form.notes} onChange={e=>setForm({...form,notes:e.target.value})} className="input" /></div>
+                    </div>
+                    <div style={{display:'flex',gap:'0.75rem',marginTop:'1rem'}}>
+                        <button onClick={handleSubmit} className="btn btn-primary">{editId?'✓ Actualizar':'✓ Agregar'}</button>
+                        <button onClick={resetForm} className="btn btn-secondary">Cancelar</button>
+                    </div>
+                </div>
+            )}
+
+            {debts.length===0 ? (
+                <div className="card" style={{textAlign:'center',padding:'3rem'}}>
+                    <div style={{fontSize:'3rem',marginBottom:'1rem'}}>💳</div>
+                    <p className="text-slate-400 mb-2">No hay deudas registradas.</p>
+                    <p className="text-sm text-slate-500">Registrá tarjetas, préstamos e hipotecas para ver la estrategia de pago óptima.</p>
+                </div>
+            ) : (
+                <div className="card">
+                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1.25rem',flexWrap:'wrap',gap:'1rem'}}>
+                        <div>
+                            <h2 className="text-lg font-semibold mb-1">Estrategia de Pago</h2>
+                            <p className="text-xs text-slate-500">El orden de prioridad para liquidar deudas antes:</p>
+                        </div>
+                        <div style={{display:'flex',gap:'0.5rem'}}>
+                            <button onClick={()=>setStrategy('avalanche')} className={`strategy-btn${strategy==='avalanche'?' active':''}`}>🌊 Avalancha</button>
+                            <button onClick={()=>setStrategy('snowball')} className={`strategy-btn${strategy==='snowball'?' active':''}`}>☃️ Bola de Nieve</button>
+                        </div>
+                    </div>
+
+                    <div style={{padding:'0.75rem',background:'rgba(6,182,212,0.05)',border:'1px solid rgba(6,182,212,0.15)',borderRadius:'0.5rem',marginBottom:'1.25rem'}}>
+                        {strategy==='avalanche'
+                            ? <p className="text-xs text-cyan-400">🌊 <strong>Avalancha:</strong> Pagá el mínimo a todas y volcá el extra a la de <strong>MAYOR tasa</strong>. Ahorrás más en intereses totales.</p>
+                            : <p className="text-xs text-cyan-400">☃️ <strong>Bola de Nieve:</strong> Pagá el mínimo a todas y volcá el extra a la de <strong>MENOR saldo</strong>. Más motivación al cerrar deudas rápido.</p>
+                        }
+                    </div>
+
+                    <div className="space-y-4">
+                        {sorted.map((d,idx)=>{
+                            const months=calcPayoffMonths(d.balance,d.payment,d.rate);
+                            const monthlyInterest=(d.balance||0)*(d.rate||0)/100/12;
+                            const principalPayment=(d.payment||0)-monthlyInterest;
+                            const pctToInterest=d.payment>0?(monthlyInterest/d.payment)*100:0;
+                            return (
+                                <div key={d.id} style={{padding:'1rem',background:'rgba(15,23,42,0.4)',border:'1px solid rgba(51,65,85,0.5)',borderRadius:'0.75rem'}}>
+                                    <div style={{display:'flex',alignItems:'flex-start',gap:'0.75rem'}}>
+                                        <div className="debt-rank">{idx+1}</div>
+                                        <div style={{flex:1}}>
+                                            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'0.5rem',marginBottom:'0.75rem'}}>
+                                                <div>
+                                                    <div className="font-semibold">{d.name}</div>
+                                                    <span className="badge badge-purple text-xs">{d.type}</span>
+                                                </div>
+                                                <div style={{display:'flex',gap:'0.5rem'}}>
+                                                    <button onClick={()=>handleEdit(d)} className="edit-btn">✏️</button>
+                                                    <button onClick={()=>handleDelete(d.id)} className="delete-btn">🗑️</button>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-1 md-grid-cols-4 gap-3">
+                                                <div><div className="text-xs text-slate-500">Saldo</div><div className="font-bold text-red-300">${fmt(d.balance)}</div></div>
+                                                <div><div className="text-xs text-slate-500">Cuota/mes</div><div className="font-semibold">${fmt(d.payment)}</div></div>
+                                                <div><div className="text-xs text-slate-500">Tasa anual</div><div className="font-semibold text-amber-300">{d.rate||0}%</div></div>
+                                                <div>
+                                                    <div className="text-xs text-slate-500">Meses restantes</div>
+                                                    <div className="font-semibold" style={{color:months===Infinity?'#fca5a5':months?'#86efac':'#64748b'}}>
+                                                        {months===null?'—':months===Infinity?'∞ (cuota insuficiente)':months}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {d.payment>0&&d.rate>0&&(
+                                                <div style={{marginTop:'0.75rem'}}>
+                                                    <div style={{display:'flex',justifyContent:'space-between',marginBottom:'0.25rem'}}>
+                                                        <span className="text-xs text-slate-500">De tu cuota: ${fmt(monthlyInterest)} a intereses / ${fmt(principalPayment)} a capital</span>
+                                                        <span className="text-xs text-slate-500">{Math.round(pctToInterest)}% → intereses</span>
+                                                    </div>
+                                                    <div style={{height:'0.375rem',background:'rgba(15,23,42,0.7)',borderRadius:'9999px',overflow:'hidden'}}>
+                                                        <div style={{height:'100%',width:`${Math.min(pctToInterest,100)}%`,background:'#ef4444',borderRadius:'9999px'}} />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {d.notes&&<div className="text-xs text-slate-500 mt-2">{d.notes}</div>}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ── EMERGENCY FUND VIEW ───────────────────────────────────────────────
+function EmergencyFundView({ fund, onSave }) {
+    const [editing, setEditing] = useState(false);
+    const [local, setLocal] = useState(fund);
+    useEffect(()=>setLocal(fund),[fund]);
+
+    const fields = [
+        {key:'housing',label:'🏠 Vivienda (alquiler/expensas)'},
+        {key:'utilities',label:'⚡ Servicios (luz, agua, internet)'},
+        {key:'food',label:'🍔 Alimentación'},
+        {key:'transport',label:'🚗 Transporte'},
+        {key:'health',label:'⚕️ Salud / Prepaga'},
+        {key:'other',label:'📦 Otros esenciales'},
+    ];
+
+    const totalEssentials=(local.housing||0)+(local.utilities||0)+(local.food||0)+(local.transport||0)+(local.health||0)+(local.other||0);
+    const target=totalEssentials*(local.targetMonths||6);
+    const current=local.currentBalance||0;
+    const pct=target>0?Math.min((current/target)*100,100):0;
+    const monthsCovered=totalEssentials>0?current/totalEssentials:0;
+    const monthsToComplete=local.monthlyDeposit>0&&current<target?Math.ceil((target-current)/local.monthlyDeposit):null;
+
+    const statusColor=pct>=100?'#22c55e':pct>=50?'#fbbf24':'#ef4444';
+    const statusLabel=pct>=100?'✅ Completado':pct>=50?'⚠️ En progreso':'🔴 Iniciando';
+
+    const handleSave = () => { onSave(local); setEditing(false); };
+
+    return (
+        <div className="space-y-6">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                <h1 className="text-3xl font-serif font-bold">🚨 Fondo de Emergencia</h1>
+                <button onClick={()=>setEditing(!editing)} className={`btn ${editing?'btn-secondary':'btn-primary'}`}>{editing?'✕ Cancelar':'✏️ Editar'}</button>
+            </div>
+
+            <div className="hero-card">
+                <div style={{position:'relative',zIndex:1}}>
+                    <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap',gap:'1rem',marginBottom:'1.5rem'}}>
+                        <div>
+                            <div className="text-sm text-cyan-400 mb-1">Fondo actual</div>
+                            <div className="text-5xl font-serif font-bold gradient-text">${fmt(current)}</div>
+                            <div className="text-sm text-slate-400 mt-1">de ${fmt(target)} meta</div>
+                        </div>
+                        <div style={{textAlign:'right'}}>
+                            <span style={{padding:'0.4rem 0.875rem',borderRadius:'0.5rem',background:`rgba(${pct>=100?'34,197,94':pct>=50?'245,158,11':'239,68,68'},0.15)`,color:statusColor,fontWeight:600,fontSize:'0.875rem'}}>
+                                {statusLabel}
+                            </span>
+                            <div className="text-sm text-slate-400 mt-2">{fmtDec(monthsCovered)} meses cubiertos</div>
+                        </div>
+                    </div>
+
+                    <div className="ef-bar-track">
+                        <div className="ef-bar-fill" style={{width:`${pct}%`}}>{pct>=15&&`${Math.round(pct)}%`}</div>
+                    </div>
+
+                    <div style={{display:'flex',gap:'1.5rem',marginTop:'1rem',flexWrap:'wrap'}} className="text-sm">
+                        <div><span className="text-slate-400">Gastos esenciales/mes:</span><span className="ml-2 text-slate-200 font-semibold">${fmt(totalEssentials)}</span></div>
+                        <div><span className="text-slate-400">Meses objetivo:</span><span className="ml-2 text-slate-200 font-semibold">{local.targetMonths||6}</span></div>
+                        {monthsToComplete&&<div><span className="text-slate-400">Tiempo para completar:</span><span className="ml-2 text-cyan-400 font-semibold">{monthsToComplete} meses</span></div>}
+                    </div>
+                </div>
+            </div>
+
+            {/* Edit form or display */}
+            <div className="grid grid-cols-1 md-grid-cols-2 gap-6">
+                {/* Essentials breakdown */}
+                <div className="card">
+                    <h2 className="text-lg font-semibold mb-4">💰 Gastos Esenciales Mensuales</h2>
+                    {editing ? (
+                        <div className="space-y-3">
+                            {fields.map(f=>(
+                                <div key={f.key} style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                                    <label style={{flex:1,fontSize:'0.875rem',color:'#94a3b8'}}>{f.label}</label>
+                                    <input type="number" value={local[f.key]||''} onChange={e=>setLocal({...local,[f.key]:parseFloat(e.target.value)||0})} className="input" style={{width:'8rem'}} placeholder="$0" />
+                                </div>
+                            ))}
+                            <div style={{borderTop:'1px solid #334155',paddingTop:'0.75rem',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                                <span className="font-semibold">TOTAL MENSUAL</span>
+                                <span className="text-xl font-serif font-bold text-cyan-400">${fmt(totalEssentials)}</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="space-y-3">
+                            {fields.map(f=>(
+                                <div key={f.key} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.5rem 0',borderBottom:'1px solid rgba(51,65,85,0.4)'}}>
+                                    <span className="text-sm text-slate-300">{f.label}</span>
+                                    <span className="font-semibold">{fund[f.key]>0?`$${fmt(fund[f.key])}`:<span className="text-slate-600">—</span>}</span>
+                                </div>
+                            ))}
+                            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',paddingTop:'0.75rem'}}>
+                                <span className="font-bold">TOTAL</span>
+                                <span className="text-xl font-serif font-bold text-cyan-400">${fmt(totalEssentials)}</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Config & status */}
+                <div className="card">
+                    <h2 className="text-lg font-semibold mb-4">⚙️ Configuración del Fondo</h2>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Meses de cobertura objetivo</label>
+                            {editing ? (
+                                <select value={local.targetMonths||6} onChange={e=>setLocal({...local,targetMonths:parseInt(e.target.value)})} className="input">
+                                    {[1,2,3,4,5,6,9,12].map(m=><option key={m} value={m}>{m} {m===3?'(mínimo)':m===6?'(recomendado)':m===12?'(conservador)':''}</option>)}
+                                </select>
+                            ) : (
+                                <div className="text-xl font-serif font-bold">{fund.targetMonths||6} meses</div>
+                            )}
+                        </div>
+                        <div>
+                            <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Saldo actual del fondo ($)</label>
+                            {editing ? (
+                                <input type="number" value={local.currentBalance||''} onChange={e=>setLocal({...local,currentBalance:parseFloat(e.target.value)||0})} className="input" placeholder="$0" />
+                            ) : (
+                                <div className="text-xl font-serif font-bold text-cyan-400">${fmt(fund.currentBalance)}</div>
+                            )}
+                        </div>
+                        <div>
+                            <label className="text-sm text-slate-400 mb-2" style={{display:'block'}}>Depósito mensual al fondo ($)</label>
+                            {editing ? (
+                                <input type="number" value={local.monthlyDeposit||''} onChange={e=>setLocal({...local,monthlyDeposit:parseFloat(e.target.value)||0})} className="input" placeholder="$0" />
+                            ) : (
+                                <div className="text-xl font-serif font-bold">${fmt(fund.monthlyDeposit)}</div>
+                            )}
+                        </div>
+                        {editing && (
+                            <button onClick={handleSave} className="btn btn-primary" style={{width:'100%'}}>💾 Guardar cambios</button>
+                        )}
+                    </div>
+
+                    {!editing && (
+                        <div style={{marginTop:'1.5rem',padding:'0.875rem',background:'rgba(6,182,212,0.05)',border:'1px solid rgba(6,182,212,0.15)',borderRadius:'0.5rem'}}>
+                            <p className="text-xs text-cyan-400 font-semibold mb-2">💡 Consejos</p>
+                            <ul style={{listStyle:'none',padding:0}}>
+                                <li className="text-xs text-slate-400 mb-1">• Meta mínima: 3 meses de gastos esenciales</li>
+                                <li className="text-xs text-slate-400 mb-1">• Ideal: 6 meses (empleo autónomo: 9-12)</li>
+                                <li className="text-xs text-slate-400 mb-1">• Guardalo en una cuenta separada de ahorro</li>
+                                <li className="text-xs text-slate-400">• Prioridad antes que otras metas de inversión</li>
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// ── SIMULATOR VIEW ────────────────────────────────────────────────────
+function SimulatorView({ incomes, fixedExpenses, budgets, debts, transactions, categories, currentMonth, goals, emergencyFund }) {
+    const now = new Date();
+    const monthNum = now.getMonth() + 1;
+
+    // Real data baseline
+    const baseIncome = incomes.length > 0 ? calcMonthlyIncome(incomes, monthNum) : 0;
+    const incomeTx = transactions.filter(t => t.category === 'income' && t.date.startsWith(currentMonth)).reduce((s,t)=>s+t.amount,0);
+    const baseFixed = calcFixedForMonth(fixedExpenses, monthNum);
+    const baseVariable = Object.values(budgets).reduce((s,b)=>s+b,0);
+    const baseDebtPayments = debts.reduce((s,d)=>s+(d.payment||0),0);
+    const baseSavingsGoals = goals.length > 0 ? Math.round(goals.reduce((s,g) => { const remaining = Math.max(0, g.target - g.progress); const monthsLeft = g.deadline ? Math.max(1, Math.ceil((new Date(g.deadline) - now) / (30.44*24*60*60*1000))) : 12; return s + remaining / monthsLeft; }, 0)) : 0;
+    const baseEmergencyDeposit = emergencyFund.monthlyDeposit || 0;
+
+    // Editable simulation state
+    const [sim, setSim] = useState({
+        income: baseIncome,
+        incomeExtra: incomeTx,
+        fixed: baseFixed,
+        variable: baseVariable,
+        debtPayments: baseDebtPayments,
+        savingsGoals: baseSavingsGoals,
+        emergencyDeposit: baseEmergencyDeposit,
+        customItems: []
+    });
+    const [newItem, setNewItem] = useState({ name: '', amount: '', type: 'expense' });
+
+    // Reset to real data
+    const resetSim = () => setSim({
+        income: baseIncome, incomeExtra: incomeTx, fixed: baseFixed,
+        variable: baseVariable, debtPayments: baseDebtPayments,
+        savingsGoals: baseSavingsGoals, emergencyDeposit: baseEmergencyDeposit, customItems: []
+    });
+
+    const addCustomItem = () => {
+        if (!newItem.name || !newItem.amount) return;
+        setSim({ ...sim, customItems: [...sim.customItems, { id: Date.now(), name: newItem.name, amount: parseFloat(newItem.amount) || 0, type: newItem.type }] });
+        setNewItem({ name: '', amount: '', type: 'expense' });
+    };
+    const removeCustomItem = (id) => setSim({ ...sim, customItems: sim.customItems.filter(i => i.id !== id) });
+
+    // Calculations
+    const totalIncome = sim.income + sim.incomeExtra + sim.customItems.filter(i=>i.type==='income').reduce((s,i)=>s+i.amount,0);
+    const totalFixed = sim.fixed;
+    const totalVariable = sim.variable;
+    const totalDebt = sim.debtPayments;
+    const totalSavings = sim.savingsGoals + sim.emergencyDeposit;
+    const totalCustomExpenses = sim.customItems.filter(i=>i.type==='expense').reduce((s,i)=>s+i.amount,0);
+    const totalExpenses = totalFixed + totalVariable + totalDebt + totalSavings + totalCustomExpenses;
+    const freeBalance = totalIncome - totalExpenses;
+    const incomePct = totalIncome > 0 ? 100 : 0;
+
+    // Waterfall data
+    const waterfall = [
+        { label: '💰 Ingreso Fijo', amount: sim.income, color: '#22c55e', pct: totalIncome > 0 ? (sim.income/totalIncome)*100 : 0 },
+        { label: '💵 Ingreso Extra', amount: sim.incomeExtra, color: '#86efac', pct: totalIncome > 0 ? (sim.incomeExtra/totalIncome)*100 : 0 },
+        ...sim.customItems.filter(i=>i.type==='income').map(i=>({ label: `✨ ${i.name}`, amount: i.amount, color: '#4ade80', pct: totalIncome > 0 ? (i.amount/totalIncome)*100 : 0 })),
+        { label: '📋 Gastos Fijos', amount: -totalFixed, color: '#60a5fa', pct: totalIncome > 0 ? (totalFixed/totalIncome)*100 : 0 },
+        { label: '🛒 Presupuesto Variable', amount: -totalVariable, color: '#f59e0b', pct: totalIncome > 0 ? (totalVariable/totalIncome)*100 : 0 },
+        { label: '💳 Cuotas Deudas', amount: -totalDebt, color: '#ef4444', pct: totalIncome > 0 ? (totalDebt/totalIncome)*100 : 0 },
+        { label: '🎯 Metas Ahorro', amount: -sim.savingsGoals, color: '#14b8a6', pct: totalIncome > 0 ? (sim.savingsGoals/totalIncome)*100 : 0 },
+        { label: '🚨 Fondo Emergencia', amount: -sim.emergencyDeposit, color: '#8b5cf6', pct: totalIncome > 0 ? (sim.emergencyDeposit/totalIncome)*100 : 0 },
+        ...sim.customItems.filter(i=>i.type==='expense').map(i=>({ label: `📌 ${i.name}`, amount: -i.amount, color: '#ec4899', pct: totalIncome > 0 ? (i.amount/totalIncome)*100 : 0 })),
+    ].filter(w => w.amount !== 0);
+
+    const freePct = totalIncome > 0 ? (freeBalance / totalIncome) * 100 : 0;
+
+    const simInput = (label, key, icon, color) => (
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.625rem 0',borderBottom:'1px solid rgba(51,65,85,0.3)'}}>
+            <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                <span>{icon}</span>
+                <span className="text-sm">{label}</span>
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                <span className="text-xs text-slate-500">$</span>
+                <input type="text" inputMode="decimal"
+                    value={sim[key]}
+                    onChange={e => { const v = e.target.value; if (/^[0-9]*[.,]?[0-9]*$/.test(v)) setSim({...sim, [key]: parseFloat(v.replace(',','.')) || 0}); }}
+                    className="input" style={{width:'7rem',textAlign:'right',color}} />
+            </div>
+        </div>
+    );
+
+    // Annual projection
+    const annualFree = freeBalance * 12;
+    const monthsToGoal = goals.length > 0 ? goals.map(g => {
+        const rem = Math.max(0, g.target - g.progress);
+        const monthly = sim.savingsGoals > 0 ? sim.savingsGoals * (rem / goals.reduce((s,go)=>s+Math.max(0,go.target-go.progress),1)) : 0;
+        return { name: g.name, months: monthly > 0 ? Math.ceil(rem / monthly) : null, remaining: rem };
+    }) : [];
+
+    return (
+        <div className="space-y-6">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'0.75rem'}}>
+                <div>
+                    <h1 className="text-3xl font-serif font-bold">🧮 Simulador Financiero</h1>
+                    <p className="text-sm text-slate-500 mt-1">Ajustá cualquier valor para ver cómo impacta en tu saldo libre</p>
+                </div>
+                <button onClick={resetSim} className="btn btn-secondary">🔄 Resetear valores</button>
+            </div>
+
+            {/* Hero result */}
+            <div className="hero-card">
+                <div style={{position:'relative',zIndex:1}}>
+                    <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap',gap:'1.5rem'}}>
+                        <div>
+                            <div className="text-sm text-cyan-400 mb-1">Saldo libre mensual</div>
+                            <div className="text-5xl font-serif font-bold" style={{color:freeBalance>=0?'#86efac':'#fca5a5'}}>
+                                {freeBalance >= 0 ? '' : '-'}${fmt(Math.abs(freeBalance))}
+                            </div>
+                            <div className="text-sm text-slate-400 mt-2">
+                                {freeBalance >= 0
+                                    ? `Te sobran $${fmt(freeBalance)} al mes después de cubrir todo`
+                                    : `Te faltan $${fmt(Math.abs(freeBalance))} para cubrir todos los gastos`}
+                            </div>
+                        </div>
+                        <div style={{textAlign:'right'}}>
+                            <div className="text-xs text-slate-500 mb-1">Proyección anual</div>
+                            <div className="text-2xl font-serif font-bold" style={{color:annualFree>=0?'#86efac':'#fca5a5'}}>${fmt(annualFree)}</div>
+                            <div className="text-xs text-slate-500 mt-1">{freePct >= 0 ? Math.round(freePct) : 0}% del ingreso queda libre</div>
+                        </div>
+                    </div>
+
+                    {/* Stacked bar */}
+                    {totalIncome > 0 && (
+                        <div style={{marginTop:'1.5rem'}}>
+                            <div style={{height:'2rem',display:'flex',borderRadius:'0.5rem',overflow:'hidden',border:'1px solid rgba(51,65,85,0.5)'}}>
+                                {totalFixed > 0 && <div style={{width:`${(totalFixed/totalIncome)*100}%`,background:'#60a5fa',minWidth:'2px'}} title={`Fijos: ${Math.round((totalFixed/totalIncome)*100)}%`} />}
+                                {totalVariable > 0 && <div style={{width:`${(totalVariable/totalIncome)*100}%`,background:'#f59e0b',minWidth:'2px'}} title={`Variables: ${Math.round((totalVariable/totalIncome)*100)}%`} />}
+                                {totalDebt > 0 && <div style={{width:`${(totalDebt/totalIncome)*100}%`,background:'#ef4444',minWidth:'2px'}} title={`Deudas: ${Math.round((totalDebt/totalIncome)*100)}%`} />}
+                                {totalSavings > 0 && <div style={{width:`${(totalSavings/totalIncome)*100}%`,background:'#14b8a6',minWidth:'2px'}} title={`Ahorro: ${Math.round((totalSavings/totalIncome)*100)}%`} />}
+                                {totalCustomExpenses > 0 && <div style={{width:`${(totalCustomExpenses/totalIncome)*100}%`,background:'#ec4899',minWidth:'2px'}} title={`Personalizados: ${Math.round((totalCustomExpenses/totalIncome)*100)}%`} />}
+                                {freeBalance > 0 && <div style={{width:`${freePct}%`,background:'rgba(34,197,94,0.3)',minWidth:'2px'}} title={`Libre: ${Math.round(freePct)}%`} />}
+                            </div>
+                            <div style={{display:'flex',gap:'0.75rem',flexWrap:'wrap',marginTop:'0.5rem'}}>
+                                <span className="text-xs" style={{color:'#60a5fa'}}>■ Fijos {Math.round((totalFixed/totalIncome)*100)}%</span>
+                                <span className="text-xs" style={{color:'#f59e0b'}}>■ Variables {Math.round((totalVariable/totalIncome)*100)}%</span>
+                                {totalDebt > 0 && <span className="text-xs" style={{color:'#ef4444'}}>■ Deudas {Math.round((totalDebt/totalIncome)*100)}%</span>}
+                                {totalSavings > 0 && <span className="text-xs" style={{color:'#14b8a6'}}>■ Ahorro {Math.round((totalSavings/totalIncome)*100)}%</span>}
+                                {totalCustomExpenses > 0 && <span className="text-xs" style={{color:'#ec4899'}}>■ Personalizado {Math.round((totalCustomExpenses/totalIncome)*100)}%</span>}
+                                {freeBalance > 0 && <span className="text-xs" style={{color:'#86efac'}}>■ Libre {Math.round(freePct)}%</span>}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md-grid-cols-2 gap-6">
+                {/* Ingresos */}
+                <div className="card">
+                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1rem'}}>
+                        <h2 className="text-lg font-semibold" style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                            <span>💰</span> Ingresos
+                        </h2>
+                        <span className="text-xl font-serif font-bold text-green-300">${fmt(totalIncome)}</span>
+                    </div>
+                    {simInput('Salario / Ingreso fijo', 'income', '🏢', '#86efac')}
+                    {simInput('Ingresos extra registrados', 'incomeExtra', '💵', '#4ade80')}
+                    {sim.customItems.filter(i=>i.type==='income').map(item => (
+                        <div key={item.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.625rem 0',borderBottom:'1px solid rgba(51,65,85,0.3)'}}>
+                            <span className="text-sm">✨ {item.name}</span>
+                            <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                                <span className="text-green-300 font-semibold">${fmt(item.amount)}</span>
+                                <button onClick={()=>removeCustomItem(item.id)} className="delete-btn" style={{padding:'0.15rem 0.4rem',fontSize:'0.75rem'}}>✕</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Egresos */}
+                <div className="card">
+                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'1rem'}}>
+                        <h2 className="text-lg font-semibold" style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                            <span>📤</span> Egresos
+                        </h2>
+                        <span className="text-xl font-serif font-bold text-red-300">${fmt(totalExpenses)}</span>
+                    </div>
+                    {simInput('Gastos fijos del mes', 'fixed', '📋', '#93c5fd')}
+                    {simInput('Presupuesto variable', 'variable', '🛒', '#fcd34d')}
+                    {simInput('Cuotas de deudas', 'debtPayments', '💳', '#fca5a5')}
+                    {simInput('Depósito metas de ahorro', 'savingsGoals', '🎯', '#5eead4')}
+                    {simInput('Depósito fondo emergencia', 'emergencyDeposit', '🚨', '#c084fc')}
+                    {sim.customItems.filter(i=>i.type==='expense').map(item => (
+                        <div key={item.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0.625rem 0',borderBottom:'1px solid rgba(51,65,85,0.3)'}}>
+                            <span className="text-sm">📌 {item.name}</span>
+                            <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                                <span className="text-amber-300 font-semibold">${fmt(item.amount)}</span>
+                                <button onClick={()=>removeCustomItem(item.id)} className="delete-btn" style={{padding:'0.15rem 0.4rem',fontSize:'0.75rem'}}>✕</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Add custom item */}
+            <div className="card" style={{borderColor:'rgba(6,182,212,0.25)'}}>
+                <h3 className="text-sm font-semibold text-cyan-400 mb-3">➕ Agregar ítem personalizado a la simulación</h3>
+                <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap',alignItems:'flex-end'}}>
+                    <div>
+                        <label className="text-xs text-slate-400" style={{display:'block',marginBottom:'0.25rem'}}>Tipo</label>
+                        <select value={newItem.type} onChange={e=>setNewItem({...newItem,type:e.target.value})} className="input" style={{width:'8rem'}}>
+                            <option value="expense">Gasto</option>
+                            <option value="income">Ingreso</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="text-xs text-slate-400" style={{display:'block',marginBottom:'0.25rem'}}>Descripción</label>
+                        <input type="text" value={newItem.name} onChange={e=>setNewItem({...newItem,name:e.target.value})} className="input" placeholder="Ej: Seguro de vida" style={{width:'12rem'}} />
+                    </div>
+                    <div>
+                        <label className="text-xs text-slate-400" style={{display:'block',marginBottom:'0.25rem'}}>Monto ($)</label>
+                        <input type="text" inputMode="decimal" value={newItem.amount} onChange={e=>{const v=e.target.value;if(/^[0-9]*[.,]?[0-9]*$/.test(v))setNewItem({...newItem,amount:v.replace(',','.')})}} className="input" placeholder="0" style={{width:'7rem'}} />
+                    </div>
+                    <button onClick={addCustomItem} className="btn btn-primary" style={{fontSize:'0.85rem'}}>Agregar</button>
+                </div>
+                <p className="text-xs text-slate-500 mt-2">Usá esto para simular gastos o ingresos que estás evaluando (ej: un seguro nuevo, un freelance, una suscripción).</p>
+            </div>
+
+            {/* Waterfall breakdown */}
+            <div className="card">
+                <h2 className="text-lg font-semibold mb-4" style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                    <span>📊</span> Desglose — ¿A dónde va tu plata?
+                </h2>
+                <div className="space-y-3">
+                    {waterfall.map((w, idx) => (
+                        <div key={idx}>
+                            <div style={{display:'flex',justifyContent:'space-between',marginBottom:'0.25rem'}}>
+                                <span className="text-sm">{w.label}</span>
+                                <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                                    {w.pct >= 1 && <span className="text-xs text-slate-500">{Math.round(w.pct)}%</span>}
+                                    <span className="font-semibold text-sm" style={{color: w.amount > 0 ? '#86efac' : w.color}}>
+                                        {w.amount > 0 ? '+' : '-'}${fmt(Math.abs(w.amount))}
+                                    </span>
+                                </div>
+                            </div>
+                            <div style={{height:'0.375rem',background:'rgba(15,23,42,0.7)',borderRadius:'9999px',overflow:'hidden'}}>
+                                <div style={{height:'100%',width:`${Math.min(w.pct, 100)}%`,background:w.color,borderRadius:'9999px',transition:'width 0.4s'}} />
+                            </div>
+                        </div>
+                    ))}
+                    {/* Free balance bar */}
+                    <div style={{borderTop:'1px solid #334155',paddingTop:'0.75rem',marginTop:'0.75rem'}}>
+                        <div style={{display:'flex',justifyContent:'space-between',marginBottom:'0.25rem'}}>
+                            <span className="text-sm font-bold">{freeBalance >= 0 ? '✅ Saldo Libre' : '🔴 Déficit'}</span>
+                            <span className="font-bold" style={{color:freeBalance>=0?'#86efac':'#fca5a5'}}>
+                                {freeBalance >= 0 ? '+' : '-'}${fmt(Math.abs(freeBalance))}
+                            </span>
+                        </div>
+                        <div style={{height:'0.5rem',background:'rgba(15,23,42,0.7)',borderRadius:'9999px',overflow:'hidden'}}>
+                            <div style={{height:'100%',width:`${Math.min(Math.abs(freePct), 100)}%`,background:freeBalance>=0?'#22c55e':'#ef4444',borderRadius:'9999px',transition:'width 0.4s'}} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Scenarios */}
+            <div className="grid grid-cols-1 md-grid-cols-3 gap-4">
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">💰 Si ahorraras todo el saldo libre</div>
+                    <div className="text-xl font-serif font-bold text-green-300">${fmt(Math.max(0, freeBalance) * 12)}/año</div>
+                    <div className="text-xs text-slate-500 mt-1">${fmt(Math.max(0, freeBalance))}/mes</div>
+                </div>
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">📋 % comprometido de tu ingreso</div>
+                    <div className="text-xl font-serif font-bold" style={{color: totalIncome > 0 ? ((totalExpenses/totalIncome)*100 > 90 ? '#fca5a5' : (totalExpenses/totalIncome)*100 > 75 ? '#fcd34d' : '#86efac') : '#64748b'}}>
+                        {totalIncome > 0 ? Math.round((totalExpenses/totalIncome)*100) : 0}%
+                    </div>
+                    <div className="text-xs text-slate-500 mt-1">Ideal: menos del 80%</div>
+                </div>
+                <div className="kpi-card">
+                    <div className="text-xs text-slate-500 mb-1">⏳ Meses para fondo emergencia</div>
+                    {(() => {
+                        const efTotal = (emergencyFund.housing||0)+(emergencyFund.utilities||0)+(emergencyFund.food||0)+(emergencyFund.transport||0)+(emergencyFund.health||0)+(emergencyFund.other||0);
+                        const efTarget = efTotal * (emergencyFund.targetMonths||6);
+                        const efRemaining = Math.max(0, efTarget - (emergencyFund.currentBalance||0));
+                        const monthsEF = sim.emergencyDeposit > 0 ? Math.ceil(efRemaining / sim.emergencyDeposit) : null;
+                        return (
+                            <div>
+                                <div className="text-xl font-serif font-bold text-purple-400">{monthsEF !== null ? `${monthsEF} meses` : '—'}</div>
+                                <div className="text-xs text-slate-500 mt-1">{efRemaining > 0 ? `Faltan $${fmt(efRemaining)}` : 'Completado ✅'}</div>
+                            </div>
+                        );
+                    })()}
+                </div>
+            </div>
+
+            {/* Goals projection */}
+            {monthsToGoal.length > 0 && (
+                <div className="card">
+                    <h2 className="text-lg font-semibold mb-4" style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                        <span>🎯</span> Proyección de Metas con Ahorro Simulado
+                    </h2>
+                    <div className="space-y-3">
+                        {monthsToGoal.map((g, idx) => (
+                            <div key={idx} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.5rem 0',borderBottom:'1px solid rgba(51,65,85,0.3)'}}>
+                                <span className="text-sm">{g.name}</span>
+                                <div style={{textAlign:'right'}}>
+                                    <span className="font-semibold text-cyan-400">
+                                        {g.months !== null ? `${g.months} meses` : 'Sin asignar'}
+                                    </span>
+                                    <div className="text-xs text-slate-500">Faltan ${fmt(g.remaining)}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    {sim.savingsGoals === 0 && freeBalance > 0 && (
+                        <div style={{marginTop:'1rem',padding:'0.75rem',background:'rgba(6,182,212,0.05)',border:'1px solid rgba(6,182,212,0.15)',borderRadius:'0.5rem'}}>
+                            <p className="text-xs text-cyan-400">💡 Tu saldo libre es ${fmt(freeBalance)}/mes — probá asignar una parte a "Depósito metas de ahorro" arriba para ver en cuánto tiempo llegarías.</p>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div style={{padding:'1rem',background:'rgba(51,65,85,0.2)',borderRadius:'0.75rem',border:'1px solid rgba(51,65,85,0.3)'}}>
+                <p className="text-xs text-slate-500">💡 <strong>Tip:</strong> Modificá cualquier número arriba para simular escenarios. Por ejemplo: ¿qué pasa si tu sueldo sube $5.000? ¿Y si sumás un gasto nuevo? ¿Si aumentás el ahorro? Los cambios son solo simulación — no modifican tus datos reales. Usá "Resetear valores" para volver a los datos actuales.</p>
+            </div>
+        </div>
+    );
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<FinanceApp />);
+    </script>
+</body>
+</html>
